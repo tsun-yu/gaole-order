@@ -164,15 +164,18 @@ const orderDisplay = computed(() => {
         margin-bottom: 0.125rem;
         overflow: hidden;
         font-size: 0.5rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
 
         &:first-child {
-          border-top-left-radius: 1rem;
-          border-top-right-radius: 1rem;
+          border-top-left-radius: 0.5rem;
+          border-top-right-radius: 0.5rem;
         }
 
         &:last-child {
-          border-bottom-left-radius: 1rem;
-          border-bottom-right-radius: 1rem;
+          border-bottom-left-radius: 0.5rem;
+          border-bottom-right-radius: 0.5rem;
         }
       }
     }

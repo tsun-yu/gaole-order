@@ -456,21 +456,12 @@ export default [
     }
   ],
   [
-    {
-      name: '急凍鳥'
-    },
-    {
-      name: 's2月桂葉'
-    },
-    {
-      name: 's1火球鼠'
-    },
-    {
-      name: 's4雙倍多多冰'
-    },
-    {
-      name: 's2風妖精'
-    },
+    { name: '急凍鳥' },
+    { name: 's2月桂葉' },
+    { name: 's1火球鼠' },
+    { name: 's4雙倍多多冰' },
+    { name: 's2風妖精' },
+    { name: 's2重泥挽馬' },
     { name: 's2多多冰' },
     { name: 's1鐵啞鈴' },
     { name: 's3風妖精' },
