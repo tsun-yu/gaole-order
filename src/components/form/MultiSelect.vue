@@ -77,6 +77,7 @@ const data = defineModel('data', {
   padding-inline: 0.25rem;
   width: v-bind(sectionWidth);
   margin-top: v-bind(sectionMarginTop);
+  min-height: 0;
 
   > label {
     line-height: 1.625rem;
@@ -87,6 +88,7 @@ const data = defineModel('data', {
     display: none;
   }
   .checkboxGroup {
+    margin: 0.25rem 0.25rem 0.5rem;
     display: grid;
     gap: 0.5rem;
     grid-template-columns: repeat(auto-fit, minmax(v-bind(optMaxWidth), 1fr));
