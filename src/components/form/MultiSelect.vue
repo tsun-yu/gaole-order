@@ -105,7 +105,7 @@ const data = defineModel('data', {
       }
 
       &:has(input:checked) {
-        box-shadow: 0 0 0 2px var(--color-primary);
+        box-shadow: 0 0 0 2px #0b57d0;
       }
 
       label {
