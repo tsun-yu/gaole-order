@@ -39,7 +39,9 @@ const orderDisplay = computed(() => {
         <li
           :class="{
             isSelect: item2?.selected,
-            isStar5: item2.name[0] !== 's' && item2.name[0] !== 'c'
+            isStar5: item2.name[0] !== 's' && item2.name[0] !== 'c',
+            isStar4: item2.name.includes('s4') || item2.name.includes('cp'),
+            isStar3: item2.name.includes('s3')
           }"
           v-for="(item2, i2) of item"
           :key="'orderr' + i2"
@@ -59,17 +61,21 @@ const orderDisplay = computed(() => {
   overflow: auto;
 
   .isStar5 {
-    background-color: var(--color-primary);
-    color: var(--color-green6);
+    outline: 1px solid #0b57d0;
 
     &.isSelect {
-      background-color: var(--color-blue6);
+      background-color: #d2e3fc;
+      color: #0b57d0;
+    }
+  }
+  .isStar4 {
+    &.isSelect {
+      background-color: #c2e7ff;
     }
   }
 
   .isSelect {
-    background-color: var(--color-teal6);
-    color: #fff;
+    background-color: rgba(32, 33, 36, 0.059);
   }
 
   div {
@@ -83,6 +89,7 @@ const orderDisplay = computed(() => {
 
       li {
         background-color: var(--color-teal1);
+        background-color: #fff;
         padding: 0.25rem;
         margin-bottom: 0.125rem;
         overflow: hidden;
