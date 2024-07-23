@@ -53,7 +53,8 @@ const orderDisplay = computed(() => {
 
 <style lang="scss" scoped>
 .container {
-  margin-top: 1rem;
+  margin-top: 0.75rem;
+  padding: 0.25rem 0.125rem 0;
   overflow: hidden;
   display: grid;
 
@@ -88,12 +89,12 @@ const orderDisplay = computed(() => {
       }
 
       &.isStar5 {
-        outline: 1px solid #0b57d0;
+        box-shadow: inset 0 0 0 1px #0b57d0;
 
         &.isSelect {
           background-color: #d2e3fc;
           color: #0b57d0;
-          outline: 2px solid #0b57d0;
+          box-shadow: inset 0 0 0 2px #0b57d0;
         }
       }
       &.isStar4 {
