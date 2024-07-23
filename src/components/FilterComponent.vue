@@ -1,0 +1,202 @@
+<script setup>
+import { onMounted, ref, watchEffect } from 'vue'
+import MultiSelect from '../components/form/MultiSelect.vue'
+import allPokemon from '../assets/allPokemon'
+
+const star5 = ref(allPokemon[0].star5)
+const star4 = ref(allPokemon[0].star4)
+const star3 = ref(allPokemon[0].star3)
+const star12 = ref(allPokemon[0].star12)
+
+const filterBtn = ref(null)
+const filter = ref(null)
+
+const filterShow = ref(false)
+const filterBtnLeft = ref('0')
+const filterBtnTop = ref('5rem')
+const filterBtnTransition = ref('0s')
+
+const hasSelected = defineModel('data', {
+  type: Array
+})
+
+onMounted(() => {
+  filter.value.addEventListener('click', (e) => {
+    if (e.target === filter.value) {
+      filterShow.value = false
+    }
+  })
+  filterBtn.value.addEventListener('touchmove', (e) => {
+    filterBtnTransition.value = '0s'
+    filterBtnLeft.value = e.touches[0].clientX + 'px'
+    filterBtnTop.value = e.touches[0].clientY + 'px'
+    e.preventDefault()
+  })
+
+  filterBtn.value.addEventListener('touchend', (e) => {
+    const btnW = filterBtn.value.clientWidth
+    filterBtnTransition.value = '0.2s ease-in-out'
+
+    if (e.changedTouches[0].clientX >= window.innerWidth / 2) {
+      filterBtnLeft.value = window.innerWidth - btnW + 'px'
+    } else {
+      filterBtnLeft.value = '0px'
+    }
+  })
+})
+
+watchEffect(() => {
+  if (!filterShow.value) {
+    document.querySelectorAll('.filter__accordion>input').forEach((v) => (v.checked = false))
+  }
+})
+</script>
+
+<template>
+  <div class="filter" ref="filter">
+    <input type="checkbox" name="showFilterHandler" id="showFilterHandler" v-model="filterShow" />
+    <label class="filterBtn" ref="filterBtn" for="showFilterHandler"
+      ><v-icon name="hi-solid-filter" scale="2" fill="#0b57d0"
+    /></label>
+    <div class="filterOpts">
+      <div class="filter__accordion">
+        <label for="star5collapse">⭐⭐⭐⭐⭐</label>
+        <input type="checkbox" id="star5collapse" />
+        <div class="filter__opts">
+          <multi-select
+            :id="'star5Opt'"
+            :checkboxOpts="star5"
+            v-model:data="hasSelected"
+            :optMaxWidth="'10rem'"
+          ></multi-select>
+        </div>
+      </div>
+      <div class="filter__accordion">
+        <label for="star4collapse">⭐⭐⭐⭐</label>
+        <input type="checkbox" id="star4collapse" />
+        <div class="filter__opts">
+          <multi-select
+            :id="'star4Opt'"
+            :checkboxOpts="star4"
+            v-model:data="hasSelected"
+            :optMaxWidth="'10rem'"
+          ></multi-select>
+        </div>
+      </div>
+      <div class="filter__accordion">
+        <label for="star3collapse">⭐⭐⭐</label>
+        <input type="checkbox" id="star3collapse" />
+        <div class="filter__opts">
+          <multi-select
+            :id="'star3Opt'"
+            :checkboxOpts="star3"
+            v-model:data="hasSelected"
+            :optMaxWidth="'10rem'"
+          ></multi-select>
+        </div>
+      </div>
+      <div class="filter__accordion">
+        <label for="star12collapse">⭐ or ⭐⭐</label>
+        <input type="checkbox" id="star12collapse" />
+        <div class="filter__opts">
+          <multi-select
+            :id="'star12Opt'"
+            :checkboxOpts="star12"
+            v-model:data="hasSelected"
+            :optMaxWidth="'10rem'"
+          ></multi-select>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<style scoped>
+.filter {
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+
+  &:has(#showFilterHandler:checked) {
+    height: 100dvh;
+  }
+
+  .filterBtn {
+    width: 4rem;
+    height: 4rem;
+    background-color: #d2e3fc;
+    position: fixed;
+    top: v-bind(filterBtnTop);
+    left: v-bind(filterBtnLeft);
+    border-radius: 50%;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    z-index: 999;
+    transition: v-bind(filterBtnTransition);
+    box-shadow:
+      0 4px 8px 3px rgba(0, 0, 0, 0.15),
+      0 1px 3px rgba(0, 0, 0, 0.3);
+  }
+  #showFilterHandler {
+    display: none;
+
+    &:checked ~ .filterOpts {
+      top: 0;
+    }
+  }
+  .filterOpts {
+    position: fixed;
+    top: -18rem;
+    width: 95%;
+    padding: 0.5rem;
+    border-radius: 1.5rem;
+    margin-top: 1rem;
+    background-color: #e9eef6;
+    box-shadow:
+      0 4px 8px 3px rgba(0, 0, 0, 0.15),
+      0 1px 3px rgba(0, 0, 0, 0.3);
+    height: fit-content;
+    max-height: 95dvh;
+    overflow: auto;
+    transition: 0.3s ease-in-out;
+
+    .filter__accordion {
+      background-color: #fff;
+      margin: 0.25rem;
+      border-radius: 0.5rem;
+
+      &:first-child {
+        border-top-left-radius: 1.5rem;
+        border-top-right-radius: 1.5rem;
+      }
+      &:last-child {
+        border-bottom-left-radius: 1.5rem;
+        border-bottom-right-radius: 1.5rem;
+      }
+
+      label {
+        cursor: pointer;
+        padding: 1rem;
+        display: block;
+      }
+      input[type='checkbox'] {
+        display: none;
+
+        &:checked + .filter__opts {
+          grid-template-rows: 1fr;
+        }
+      }
+      .filter__opts {
+        display: grid;
+        grid-template-rows: 0fr;
+        overflow: hidden;
+        transition: 0.3s ease-in-out;
+      }
+    }
+  }
+}
+</style>
