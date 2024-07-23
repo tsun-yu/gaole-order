@@ -53,8 +53,7 @@ const orderDisplay = computed(() => {
 
 <style lang="scss" scoped>
 .container {
-  margin-top: 0.75rem;
-  padding: 0.25rem 0.125rem 0;
+  padding: 0.25rem 0.125rem;
   overflow: hidden;
   display: grid;
 
@@ -63,8 +62,6 @@ const orderDisplay = computed(() => {
   grid-template-columns: repeat(auto-fit, minmax(2.5rem, 1fr));
 
   div {
-    // flex: 1 1;
-
     .item {
       background-color: #fff;
       padding: 0.125rem 0.25rem;
