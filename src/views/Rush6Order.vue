@@ -1,32 +1,29 @@
 <script setup>
 import { computed, ref } from 'vue'
-import order from '../assets/order'
+import order from '@/assets/order'
 import FilterComponent from '@/components/FilterComponent.vue'
 
-const star5Selected = ref([])
 const hasSelected = ref([])
+/* const star5Selected = computed(() => {
+  return hasSelected.value.filter((item) => item[0] !== 's' && item[0] !== 'c')
+})
+const star4Selected = computed(() => {
+  return hasSelected.value.filter((item) => item.includes('s4') || item.includes('cp'))
+})
+const star3Selected = computed(() => {
+  return hasSelected.value.filter((item) => item.includes('s3'))
+}) */
 
 const orderDisplay = computed(() => {
-  return order
-    .map((col) => {
-      if (!hasSelected.value.length && !star5Selected.value.length) {
-        return col
-      }
+  if (!hasSelected.value.length) {
+    return order
+  }
+  return order.reduce((acc, col) => {
+    const filteredItems = col.filter((item) => hasSelected.value.includes(item.name))
+    if (!filteredItems.length) return acc
 
-      if (
-        col.filter((item) => {
-          if (hasSelected.value.includes(item.name)) {
-            item.selected = true
-            return true
-          }
-          item.selected = false
-        }).length > 0
-      ) {
-        return col
-      }
-      return ''
-    })
-    .filter((v) => v !== '')
+    return [...acc, col.map((item) => ({ ...item, selected: filteredItems.includes(item) }))]
+  }, [])
 })
 </script>
 
