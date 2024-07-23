@@ -31,10 +31,6 @@ const orderDisplay = computed(() => {
 </script>
 
 <template>
-  <div class="page">
-    <v-icon name="bi-bucket-fill" scale="10" fill="#00a9e0" />
-    <p>桶一</p>
-  </div>
   <FilterComponent v-model:data="hasSelected"></FilterComponent>
   <div class="container">
     <div v-for="(item, i) of orderDisplay" :key="'order' + i">
@@ -56,23 +52,6 @@ const orderDisplay = computed(() => {
 </template>
 
 <style lang="scss" scoped>
-@import url('https://fonts.googleapis.com/css2?family=LXGW+WenKai+Mono+TC&display=swap');
-.page {
-  // height: 100vh;
-  position: relative;
-
-  p {
-    position: absolute;
-    writing-mode: vertical-lr;
-    font-family: 'LXGW WenKai Mono TC', monospace;
-    font-weight: 700;
-    color: #fff;
-    font-style: normal;
-    top: 40%;
-    left: 4.25rem;
-    font-size: 3rem;
-  }
-}
 .container {
   margin-top: 1rem;
   display: flex;

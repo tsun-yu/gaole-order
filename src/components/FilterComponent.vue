@@ -60,8 +60,13 @@ watchEffect(() => {
     /></label>
     <div class="filterOpts">
       <div class="filter__accordion">
-        <label for="star5collapse">⭐⭐⭐⭐⭐</label>
         <input type="checkbox" id="star5collapse" />
+        <label for="star5collapse"
+          ><p>⭐⭐⭐⭐⭐</p>
+          <p class="filter__arrow">
+            <v-icon name="io-chevron-down-outline" scale="1.25" fill="#fff" />
+          </p>
+        </label>
         <div class="filter__opts">
           <multi-select
             :id="'star5Opt'"
@@ -72,8 +77,12 @@ watchEffect(() => {
         </div>
       </div>
       <div class="filter__accordion">
-        <label for="star4collapse">⭐⭐⭐⭐</label>
         <input type="checkbox" id="star4collapse" />
+        <label for="star4collapse">
+          <p>⭐⭐⭐⭐</p>
+          <p class="filter__arrow">
+            <v-icon name="io-chevron-down-outline" scale="1.25" fill="#0b57d0" /></p
+        ></label>
         <div class="filter__opts">
           <multi-select
             :id="'star4Opt'"
@@ -84,8 +93,12 @@ watchEffect(() => {
         </div>
       </div>
       <div class="filter__accordion">
-        <label for="star3collapse">⭐⭐⭐</label>
         <input type="checkbox" id="star3collapse" />
+        <label for="star3collapse">
+          <p>⭐⭐⭐</p>
+          <p class="filter__arrow">
+            <v-icon name="io-chevron-down-outline" scale="1.25" fill="#0b57d0" /></p
+        ></label>
         <div class="filter__opts">
           <multi-select
             :id="'star3Opt'"
@@ -96,8 +109,12 @@ watchEffect(() => {
         </div>
       </div>
       <div class="filter__accordion">
-        <label for="star12collapse">⭐ or ⭐⭐</label>
         <input type="checkbox" id="star12collapse" />
+        <label for="star12collapse">
+          <p>⭐ & ⭐⭐</p>
+          <p class="filter__arrow">
+            <v-icon name="io-chevron-down-outline" scale="1.25" fill="#fff" /></p
+        ></label>
         <div class="filter__opts">
           <multi-select
             :id="'star12Opt'"
@@ -150,7 +167,7 @@ watchEffect(() => {
   }
   .filterOpts {
     position: fixed;
-    top: -18rem;
+    top: -20rem;
     width: 95%;
     padding: 0.5rem;
     border-radius: 1.5rem;
@@ -182,12 +199,31 @@ watchEffect(() => {
         cursor: pointer;
         padding: 1rem;
         display: block;
+        display: flex;
+        justify-content: space-between;
+
+        p {
+          align-content: center;
+
+          &.filter__arrow {
+            width: 2rem;
+            aspect-ratio: 1;
+            background-color: #f6f8fc;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            transition: 0.2s ease-in-out;
+          }
+        }
       }
       input[type='checkbox'] {
         display: none;
 
-        &:checked + .filter__opts {
+        &:checked ~ .filter__opts {
           grid-template-rows: 1fr;
+        }
+        &:checked ~ label .filter__arrow {
+          transform: rotate(180deg);
         }
       }
       .filter__opts {
