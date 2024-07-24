@@ -1,29 +1,32 @@
 <script setup>
 import { computed, ref } from 'vue'
-import order from '@/assets/order'
+import orderList from '@/assets/order'
 import FilterComponent from '@/components/FilterComponent.vue'
 
 const hasSelected = ref([])
-/* const star5Selected = computed(() => {
-  return hasSelected.value.filter((item) => item[0] !== 's' && item[0] !== 'c')
-})
-const star4Selected = computed(() => {
-  return hasSelected.value.filter((item) => item.includes('s4') || item.includes('cp'))
-})
-const star3Selected = computed(() => {
-  return hasSelected.value.filter((item) => item.includes('s3'))
-}) */
 
 const orderDisplay = computed(() => {
   if (!hasSelected.value.length) {
-    return order
+    return orderList.map((col) => col.order)
   }
-  return order.reduce((acc, col) => {
-    const filteredItems = col.filter((item) => hasSelected.value.includes(item.name))
+  let orderListFiltered = orderList.reduce((acc, col) => {
+    const filteredItems = col.order.filter((item) => {
+      item.selected = hasSelected.value.includes(item.name)
+      return item.selected
+    })
+
     if (!filteredItems.length) return acc
 
-    return [...acc, col.map((item) => ({ ...item, selected: filteredItems.includes(item) }))]
+    col.count = filteredItems.reduce((acc, item) => {
+      if (item.name[0] !== 's' && item.name[0] !== 'c') return acc + 100
+      if (item.name.includes('s4') || item.name.includes('cp')) return acc + 10
+      if (item.name.includes('s3')) return acc + 1
+    }, 0)
+
+    return [...acc, col].sort((a, b) => b.count - a.count)
   }, [])
+
+  return orderListFiltered.map((item) => item.order)
 })
 </script>
 
