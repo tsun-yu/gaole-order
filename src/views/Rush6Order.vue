@@ -23,6 +23,8 @@ const orderDisplay = computed(() => {
       if (item.name.includes('s3')) return acc + 1
     }, 0)
 
+    // console.log(col.count)
+
     return [...acc, col].sort((a, b) => b.count - a.count)
   }, [])
 
@@ -67,7 +69,7 @@ const orderDisplay = computed(() => {
       padding: 0.125rem 0.25rem;
       border-radius: 0.125rem;
       margin-bottom: 0.125rem;
-      font-size: 0.5rem;
+      font-size: min(2vw, 1rem);
 
       width: 2.5rem;
       width: max(2.5rem, 100%);

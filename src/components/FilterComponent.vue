@@ -1,63 +1,95 @@
 <script setup>
-import { onMounted, ref, watchEffect } from 'vue'
-import MultiSelect from '../components/form/MultiSelect.vue'
-import allPokemon from '../assets/allPokemon'
+import { onMounted, ref, watchEffect } from 'vue';
+import MultiSelect from '../components/form/MultiSelect.vue';
+import allPokemon from '../assets/allPokemon';
 
-const star5 = ref(allPokemon[0].star5)
-const star4 = ref(allPokemon[0].star4)
-const star3 = ref(allPokemon[0].star3)
-const star12 = ref(allPokemon[0].star12)
+const star5 = ref(allPokemon[0].star5);
+const star4 = ref(allPokemon[0].star4);
+const star3 = ref(allPokemon[0].star3);
+const star12 = ref(allPokemon[0].star12);
 
-const filterBtn = ref(null)
-const filter = ref(null)
+const filterBtn = ref(null);
+const filter = ref(null);
 
-const filterShow = ref(false)
-const filterBtnLeft = ref('0')
-const filterBtnTop = ref('5rem')
-const filterBtnTransition = ref('0s')
+const filterShow = ref(false);
+const filterBtnLeft = ref('');
+const filterBtnTop = ref('5rem');
+const filterBtnTransition = ref('0s');
 
 const hasSelected = defineModel('data', {
   type: Array
-})
+});
 
 onMounted(() => {
+  const btnW = filterBtn.value.clientWidth;
+  const btnH = filterBtn.value.clientHeight;
+  filterBtnLeft.value = window.innerWidth - btnW - 5 + 'px';
+
+  //outside click to close filter
   filter.value.addEventListener('click', (e) => {
     if (e.target === filter.value) {
-      filterShow.value = false
+      filterShow.value = false;
     }
-  })
+  });
   filterBtn.value.addEventListener('touchmove', (e) => {
-    filterBtnTransition.value = '0s'
-    filterBtnLeft.value = e.touches[0].clientX + 'px'
-    filterBtnTop.value = e.touches[0].clientY + 'px'
-    e.preventDefault()
-  })
+    const newX = e.touches[0].clientX - btnW / 2;
+    const newY = e.touches[0].clientY - btnH / 2;
 
+    filterBtnTransition.value = '0s';
+    filterBtnLeft.value = newX + 'px';
+    filterBtnTop.value = newY + 'px';
+    e.preventDefault();
+  });
   filterBtn.value.addEventListener('touchend', (e) => {
-    const btnW = filterBtn.value.clientWidth
-    filterBtnTransition.value = '0.2s ease-in-out'
+    filterBtnTransition.value = '0.2s ease-in-out';
 
     if (e.changedTouches[0].clientX >= window.innerWidth / 2) {
-      filterBtnLeft.value = window.innerWidth - btnW + 'px'
+      filterBtnLeft.value = window.innerWidth - btnW - 5 + 'px';
     } else {
-      filterBtnLeft.value = '0px'
+      filterBtnLeft.value = '5px';
     }
-  })
-})
+  });
+  filterBtn.value.addEventListener('mousedown', (mousedownEvent) => {
+    const offsetX = mousedownEvent.offsetX;
+    const offsetY = mousedownEvent.offsetY;
+
+    const mousemoveHandler = (mousemoveEvent) => {
+      const newX = mousemoveEvent.clientX - offsetX;
+      const newY = mousemoveEvent.clientY - offsetY;
+      filterBtnTransition.value = '0s';
+      filterBtnLeft.value = newX + 'px';
+      filterBtnTop.value = newY + 'px';
+    };
+    const mouseupHandler = (mouseupEvent) => {
+      document.removeEventListener('mousemove', mousemoveHandler);
+      filterBtnTransition.value = '0.2s ease-in-out';
+      document.removeEventListener('mouseup', mouseupHandler);
+
+      if (mouseupEvent.clientX >= window.innerWidth / 2) {
+        filterBtnLeft.value = window.innerWidth - btnW - 5 + 'px';
+      } else {
+        filterBtnLeft.value = '5px';
+      }
+    };
+
+    document.addEventListener('mousemove', mousemoveHandler);
+    document.addEventListener('mouseup', mouseupHandler);
+  });
+});
 
 watchEffect(() => {
   if (!filterShow.value) {
-    document.querySelectorAll('.filter__accordion>input').forEach((v) => (v.checked = false))
+    document.querySelectorAll('.filter__accordion>input').forEach((v) => (v.checked = false));
   }
-})
+});
 </script>
 
 <template>
   <div class="filter" ref="filter">
     <input type="checkbox" name="showFilterHandler" id="showFilterHandler" v-model="filterShow" />
-    <label class="filterBtn" ref="filterBtn" for="showFilterHandler"
-      ><v-icon name="hi-solid-filter" scale="2" fill="#0b57d0"
-    /></label>
+    <label class="filterBtn" ref="filterBtn" for="showFilterHandler">
+      <v-icon name="md-filterlist-round" scale="2.2" fill="#0b57d0" />
+    </label>
     <div class="filterOpts">
       <div class="filter__accordion">
         <input type="checkbox" id="star5collapse" />
@@ -111,7 +143,7 @@ watchEffect(() => {
       <div class="filter__accordion">
         <input type="checkbox" id="star12collapse" />
         <label for="star12collapse">
-          <p>⭐ & ⭐⭐</p>
+          <p>⭐⭐ & ⭐</p>
           <p class="filter__arrow">
             <v-icon name="io-chevron-down-outline" scale="1.25" fill="#fff" /></p
         ></label>
@@ -169,7 +201,7 @@ watchEffect(() => {
     position: fixed;
     top: -20rem;
     width: 95%;
-    padding: 0.5rem;
+    padding: 0.625rem;
     border-radius: 1.5rem;
     margin-top: 1rem;
     background-color: #e9eef6;
@@ -183,16 +215,16 @@ watchEffect(() => {
 
     .filter__accordion {
       background-color: #fff;
-      margin: 0.25rem;
-      border-radius: 0.5rem;
+      margin: 0.125rem;
+      border-radius: 0.25rem;
 
       &:first-child {
-        border-top-left-radius: 1.5rem;
-        border-top-right-radius: 1.5rem;
+        border-top-left-radius: 1.125rem;
+        border-top-right-radius: 1.125rem;
       }
       &:last-child {
-        border-bottom-left-radius: 1.5rem;
-        border-bottom-right-radius: 1.5rem;
+        border-bottom-left-radius: 1.125rem;
+        border-bottom-right-radius: 1.125rem;
       }
 
       label {

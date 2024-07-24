@@ -45,11 +45,11 @@ defineProps({
     type: Boolean,
     default: false
   }
-})
+});
 
 const data = defineModel('data', {
   type: Array
-})
+});
 </script>
 
 <template>
@@ -77,6 +77,7 @@ const data = defineModel('data', {
   padding-inline: 0.25rem;
   width: v-bind(sectionWidth);
   margin-top: v-bind(sectionMarginTop);
+  margin-bottom: 0.125rem;
   min-height: 0;
 
   > label {
