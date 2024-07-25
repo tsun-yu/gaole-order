@@ -48,11 +48,14 @@ onMounted(() => {
     filterBtnTransition.value = '0.2s ease-in-out';
 
     const newX = touch.clientX >= halfWindowWidth ? maxLeft : 5;
-    const newY =
-      touch.clientY >= maxTop ? maxTop : touch.clientY < 0 ? 5 : touch.clientY - btnH / 2;
-
     filterBtnLeft.value = `${newX}px`;
-    filterBtnTop.value = `${newY}px`;
+
+    if (touch.clientY >= maxTop) {
+      filterBtnTop.value = `${maxTop}px`;
+    }
+    if (touch.clientY < 0) {
+      filterBtnTop.value = `5px`;
+    }
   });
   filterBtn.value.addEventListener('mousedown', (mousedownEvent) => {
     const offsetX = mousedownEvent.offsetX;
@@ -75,15 +78,14 @@ onMounted(() => {
       const maxLeft = window.innerWidth - btnW - 5;
 
       const newX = mouseupEvent.clientX >= halfWindowWidth ? maxLeft : 5;
-      const newY =
-        mouseupEvent.clientY >= maxTop
-          ? maxTop
-          : mouseupEvent.clientY < 0
-            ? 5
-            : mouseupEvent.clientY - btnH / 2;
-
       filterBtnLeft.value = `${newX}px`;
-      filterBtnTop.value = `${newY}px`;
+
+      if (mouseupEvent.clientY >= maxTop) {
+        filterBtnTop.value = `${maxTop}px`;
+      }
+      if (mouseupEvent.clientY < 0) {
+        filterBtnTop.value = `5px`;
+      }
     };
 
     document.addEventListener('mousemove', mousemoveHandler);
@@ -102,7 +104,8 @@ watchEffect(() => {
   <div class="filter" ref="filter">
     <input type="checkbox" name="showFilterHandler" id="showFilterHandler" v-model="filterShow" />
     <label class="filterBtn" ref="filterBtn" for="showFilterHandler">
-      <v-icon name="md-filterlist-round" scale="2.2" fill="#0b57d0" />
+      <v-icon v-show="!filterShow" name="md-filterlist-round" scale="2.2" fill="#0b57d0" />
+      <v-icon v-show="filterShow" name="pr-times" scale="2.2" fill="#0b57d0" />
     </label>
     <div class="filterOpts">
       <div class="filter__accordion">
