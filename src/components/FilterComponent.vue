@@ -70,11 +70,20 @@ onMounted(() => {
       filterBtnTransition.value = '0.2s ease-in-out';
       document.removeEventListener('mouseup', mouseupHandler);
 
-      if (mouseupEvent.clientX >= window.innerWidth / 2) {
-        filterBtnLeft.value = window.innerWidth - btnW - 5 + 'px';
-      } else {
-        filterBtnLeft.value = '5px';
-      }
+      const halfWindowWidth = window.innerWidth / 2;
+      const maxTop = window.innerHeight - btnH - 5;
+      const maxLeft = window.innerWidth - btnW - 5;
+
+      const newX = mouseupEvent.clientX >= halfWindowWidth ? maxLeft : 5;
+      const newY =
+        mouseupEvent.clientY >= maxTop
+          ? maxTop
+          : mouseupEvent.clientY < 0
+            ? 5
+            : mouseupEvent.clientY - btnH / 2;
+
+      filterBtnLeft.value = `${newX}px`;
+      filterBtnTop.value = `${newY}px`;
     };
 
     document.addEventListener('mousemove', mousemoveHandler);
@@ -173,6 +182,7 @@ watchEffect(() => {
   display: flex;
   justify-content: center;
   width: 100%;
+  z-index: 999;
 
   &:has(#showFilterHandler:checked) {
     height: 100dvh;
