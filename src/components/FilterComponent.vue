@@ -41,13 +41,18 @@ onMounted(() => {
     e.preventDefault();
   });
   filterBtn.value.addEventListener('touchend', (e) => {
+    const touch = e.changedTouches[0];
+    const halfWindowWidth = window.innerWidth / 2;
+    const maxTop = window.innerHeight - btnH - 5;
+    const maxLeft = window.innerWidth - btnW - 5;
     filterBtnTransition.value = '0.2s ease-in-out';
 
-    if (e.changedTouches[0].clientX >= window.innerWidth / 2) {
-      filterBtnLeft.value = window.innerWidth - btnW - 5 + 'px';
-    } else {
-      filterBtnLeft.value = '5px';
-    }
+    const newX = touch.clientX >= halfWindowWidth ? maxLeft : 5;
+    const newY =
+      touch.clientY >= maxTop ? maxTop : touch.clientY < 0 ? 5 : touch.clientY - btnH / 2;
+
+    filterBtnLeft.value = `${newX}px`;
+    filterBtnTop.value = `${newY}px`;
   });
   filterBtn.value.addEventListener('mousedown', (mousedownEvent) => {
     const offsetX = mousedownEvent.offsetX;
@@ -212,6 +217,7 @@ watchEffect(() => {
     max-height: 95dvh;
     overflow: auto;
     transition: 0.3s ease-in-out;
+    z-index: 998;
 
     .filter__accordion {
       background-color: #fff;
