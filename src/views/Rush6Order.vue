@@ -14,16 +14,6 @@ const hasSelectedSorted = computed(() => {
   }
 
   const itemInSelectedCol = [...hasSelected.value].map((item) => {
-    /*     let isInCol = false;
-    isSelectedCol.value.forEach((colId) => {
-      orderList[colId - 1].order.forEach((item2) => {
-        if (item2.name === item) {
-          isInCol = true;
-          return;
-        }
-      });
-    });
-    return { name: item, isInCol }; */
     const isInCol = isSelectedCol.value.some((colId) =>
       orderList[colId - 1].order.some((item2) => item2.name === item)
     );
@@ -96,8 +86,7 @@ const orderDisplay = computed(() => {
         v-model="isSelectedCol"
       />
       <label :for="'column' + i" class="orderList__selectBtn">
-        <!-- <v-icon name="md-checkcircleoutline-outlined" scale="1.2" fill="#d1d6d4" /> -->
-        <v-icon name="md-checkcircle" scale="1.2" fill="#d1d6d4" />
+        <v-icon name="md-checkcircle" scale="1" fill="#d1d6d4" />
       </label>
       <div class="orderList__wrap">
         <div
@@ -149,21 +138,21 @@ const orderDisplay = computed(() => {
   }
 }
 .orderList {
-  padding: 0.25rem;
+  padding: 0.25rem 0.125rem;
   margin-top: 0.5rem;
   overflow: hidden;
   display: grid;
-  gap: 0.375rem;
+  gap: 0.25rem;
   grid-template-columns: repeat(auto-fit, minmax(2.5rem, 1fr));
 
   .orderList__col {
     box-shadow: 0 0 0 1px #d1d6d4;
-    border-radius: 1rem;
+    border-radius: 0.75rem;
     overflow: hidden;
     padding-bottom: 0.125rem;
 
     &:has(input:checked) {
-      box-shadow: 0 0 0 2px #0b57d0;
+      box-shadow: 0 0 0 1px #0b57d0;
     }
 
     input[type='checkbox'] {
