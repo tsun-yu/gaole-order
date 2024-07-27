@@ -286,4 +286,16 @@ watchEffect(() => {
     }
   }
 }
+@media (max-width: 768px) {
+  .filter {
+    .filterBtn {
+      width: 3rem;
+      height: 3rem;
+
+      svg {
+        width: 2rem;
+      }
+    }
+  }
+}
 </style>
