@@ -5,9 +5,21 @@ import App from './App.vue';
 import router from './router';
 
 import { OhVueIcon, addIcons } from 'oh-vue-icons';
-import { IoChevronDownOutline, MdFilterlistRound, PrTimes } from 'oh-vue-icons/icons';
+import {
+  IoChevronDownOutline,
+  MdFilterlistRound,
+  PrTimes,
+  MdCheckcircleoutlineOutlined,
+  MdCheckcircle
+} from 'oh-vue-icons/icons';
 
-addIcons(IoChevronDownOutline, MdFilterlistRound, PrTimes);
+addIcons(
+  IoChevronDownOutline,
+  MdFilterlistRound,
+  PrTimes,
+  MdCheckcircleoutlineOutlined,
+  MdCheckcircle
+);
 
 const app = createApp(App);
 
