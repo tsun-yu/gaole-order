@@ -7,8 +7,20 @@
   font-weight: normal;
 }
 
+@font-face {
+  font-family: "Google Sans";
+  src: url('./fonts/ProductSans-Regular.ttf');
+}
+
+@font-face {
+  font-family: 'Noto Serif TC';
+  src: url(./fonts/Noto_Serif_TC/NotoSerifTC-Regular.otf);
+}
+
 body {
   font-family:
+    "Google Sans",
+    'Noto Serif TC',
     Inter,
     -apple-system,
     BlinkMacSystemFont,

@@ -105,6 +105,7 @@ const orderDisplay = computed(() => {
       </div>
     </div>
   </div>
+  <!-- <div class="doneBtn" v-show="isSelectedCol.length >= 2">Done</div> -->
 </template>
 
 <style lang="scss" scoped>
@@ -142,14 +143,13 @@ const orderDisplay = computed(() => {
   margin-top: 0.5rem;
   overflow: hidden;
   display: grid;
-  gap: 0.25rem;
+  gap: 0.1875rem;
   grid-template-columns: repeat(auto-fit, minmax(2.5rem, 1fr));
 
   .orderList__col {
     box-shadow: 0 0 0 1px #d1d6d4;
-    border-radius: 0.75rem;
+    border-radius: 0.625rem;
     overflow: hidden;
-    padding-bottom: 0.125rem;
 
     &:has(input:checked) {
       box-shadow: 0 0 0 1px #0b57d0;
@@ -171,11 +171,11 @@ const orderDisplay = computed(() => {
       display: grid;
       place-items: center;
       cursor: pointer;
-      margin-bottom: 0.25rem;
+      margin-bottom: 0.125rem;
       padding: 0.25rem 0.5rem;
     }
     .orderList__wrap {
-      padding-inline: 0.125rem;
+      padding-inline: 1px;
 
       .orderList__item {
         background-color: #fff;
@@ -225,5 +225,20 @@ const orderDisplay = computed(() => {
       }
     }
   }
+}
+.doneBtn {
+  position: fixed;
+  z-index: 997;
+  bottom: 2rem;
+  right: 0.5rem;
+  background-color: #d2e3fc;
+  padding: 1rem 2rem;
+  border-radius: 1rem;
+  box-shadow:
+    0 4px 8px 3px rgba(0, 0, 0, 0.15),
+    0 1px 3px rgba(0, 0, 0, 0.3);
+  color: #0b57d0;
+  cursor: pointer;
+  font-weight: 700;
 }
 </style>
