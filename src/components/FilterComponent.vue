@@ -289,8 +289,8 @@ watchEffect(() => {
 @media (max-width: 768px) {
   .filter {
     .filterBtn {
-      width: 3rem;
-      height: 3rem;
+      width: 3.5rem;
+      height: 3.5rem;
 
       svg {
         width: 2rem;
