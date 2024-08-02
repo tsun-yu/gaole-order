@@ -119,15 +119,17 @@ const orderDisplay = computed(() => {
   </div>
   <div
     class="doneBtn"
-    v-show="isSelectedCol.length >= 2"
+    v-show="isSelectedCol.length >= 2 && !magnifySelectedShow"
     @click="magnifySelectedShow = !magnifySelectedShow"
   >
-    <template v-if="!magnifySelectedShow">
-      <v-icon name="md-zoomoutmap-round" scale="1" fill="#0b57d0" />Select
-    </template>
-    <template v-if="magnifySelectedShow">
-      <v-icon name="md-zoominmap-round" scale="1" fill="#0b57d0" />Close
-    </template>
+    <v-icon name="md-zoomoutmap-round" scale="1" fill="#0b57d0" />Select
+  </div>
+  <div
+    class="doneBtn"
+    v-show="isSelectedCol.length >= 1 && magnifySelectedShow"
+    @click="magnifySelectedShow = !magnifySelectedShow"
+  >
+    <v-icon name="md-zoominmap-round" scale="1" fill="#0b57d0" />Close
   </div>
 </template>
 
@@ -150,6 +152,8 @@ const orderDisplay = computed(() => {
     border: 1px solid #676767;
     font-size: 1rem;
     cursor: pointer;
+    display: flex;
+    align-items: center;
 
     input[type='checkbox'] {
       display: none;
@@ -262,7 +266,9 @@ const orderDisplay = computed(() => {
     0 1px 3px rgba(0, 0, 0, 0.3);
   color: #0b57d0;
   cursor: pointer;
-  font-weight: 700;
+  font-size: 1.125rem;
+  display: flex;
+  align-items: center;
 
   svg {
     margin-right: 1rem;

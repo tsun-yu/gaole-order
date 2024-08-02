@@ -1,8 +1,6 @@
 <script setup>
 import { computed } from 'vue';
 
-// import { onMounted, ref, watchEffect } from 'vue';
-
 const isSelectedCol = defineModel('isSelectedCol', {
   type: Array,
   default: []
@@ -68,7 +66,6 @@ const isSelectedColDisplay = computed(() => {
     border-radius: 1.5rem;
     padding: 0.5rem;
     margin-top: 0.5rem;
-    overflow: hidden;
     display: grid;
     gap: 0.1875rem;
     grid-template-columns: repeat(auto-fit, minmax(2.5rem, 1fr));

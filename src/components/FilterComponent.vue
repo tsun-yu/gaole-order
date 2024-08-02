@@ -229,6 +229,9 @@ watchEffect(() => {
     height: fit-content;
     max-height: 95dvh;
     overflow: auto;
+    &::-webkit-scrollbar {
+      display: none;
+    }
     transition: 0.3s ease-in-out;
     z-index: 998;
 
