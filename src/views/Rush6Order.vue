@@ -6,25 +6,31 @@ import MagnifySelected from '@/components/MagnifySelected.vue';
 
 const hasSelected = ref([]);
 const hasSelectedSorted = computed(() => {
+  const itemClickedCheckList = [...hasSelected.value].map((item) => {
+    const isClicked = selectedItemClick.value.some((itemClicked) => itemClicked === item);
+    return { name: item, isClicked };
+  });
+
   if (!isSelectedCol.value.length) {
-    return [...hasSelected.value]
-      .map((item) => ({ name: item, isInCol: false }))
+    return itemClickedCheckList
+      .map((item) => ({ ...item, isInCol: false }))
       .sort((a, b) => {
         return b.name > a.name ? -1 : 1;
       });
   }
 
-  const itemInSelectedCol = [...hasSelected.value].map((item) => {
+  const itemInSelectedCol = itemClickedCheckList.map((itemCheck) => {
     const isInCol = isSelectedCol.value.some((colId) =>
-      orderList[colId - 1].order.some((item2) => item2.name === item)
+      orderList[colId - 1].order.some((itemOriginal) => itemOriginal.name === itemCheck.name)
     );
-    return { name: item, isInCol };
+    return { ...itemCheck, isInCol };
   });
 
   return itemInSelectedCol.sort((a, b) => {
     return b.name > a.name ? -1 : 1;
   });
 });
+const selectedItemClick = ref([]);
 
 const isSelectedCol = ref([]);
 const magnifySelectedShow = ref(false);
@@ -73,7 +79,10 @@ const orderDisplay = computed(() => {
   <div class="selected" v-show="!!hasSelected.length">
     <label
       class="selected__item"
-      :class="{ 'selected__item--isInCol': item.isInCol }"
+      :class="{
+        'selected__item--isInCol': item.isInCol,
+        'selected__item--isClicked': item.isClicked
+      }"
       v-for="item of hasSelectedSorted"
       :key="item.name"
       :for="item.name"
@@ -91,6 +100,7 @@ const orderDisplay = computed(() => {
   <div class="orderList">
     <div v-for="item of orderDisplay" :key="'order' + item.id" class="orderList__col">
       <input
+        class="orderList__selectCol"
         type="checkbox"
         :name="'column' + item.id"
         :id="'column' + item.id"
@@ -101,7 +111,7 @@ const orderDisplay = computed(() => {
         <v-icon name="md-checkcircle" scale="1" fill="#d1d6d4" />
       </label>
       <div class="orderList__wrap">
-        <div
+        <label
           class="orderList__item"
           :class="{
             'orderList__item--selected': item2?.selected,
@@ -110,10 +120,18 @@ const orderDisplay = computed(() => {
             'orderList__item--star3': item2.name.includes('s3')
           }"
           v-for="(item2, i2) of item.order"
-          :key="'orderr' + i2"
+          :key="'column' + item.id + i2"
+          :for="'column' + item.id + i2"
         >
+          <input
+            type="checkbox"
+            :id="'column' + item.id + i2"
+            :name="'column' + item.id + i2"
+            :value="item2.name"
+            v-model="selectedItemClick"
+          />
           {{ item2.name }}
-        </div>
+        </label>
       </div>
     </div>
   </div>
@@ -164,6 +182,14 @@ const orderDisplay = computed(() => {
     background-color: #d2e3fc;
     border-color: #d2e3fc;
   }
+  .selected__item--isClicked {
+    background-color: #c4eed0;
+    border-color: #c4eed0;
+
+    &.selected__item--isInCol {
+      background-color: #d2e3fc;
+    }
+  }
 }
 .orderList {
   padding: 0.25rem 0.125rem;
@@ -178,7 +204,7 @@ const orderDisplay = computed(() => {
     border-radius: 0.625rem;
     overflow: hidden;
 
-    &:has(input:checked) {
+    &:has(.orderList__selectCol:checked) {
       box-shadow: 0 0 0 1px #0b57d0;
     }
 
@@ -214,6 +240,8 @@ const orderDisplay = computed(() => {
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
+        display: block;
+        cursor: pointer;
 
         &:first-of-type {
           border-top-left-radius: 0.5rem;
@@ -239,15 +267,17 @@ const orderDisplay = computed(() => {
             background-color: #d2e3fc;
           }
         }
-
         &.orderList__item--star3 {
           &.orderList__item--selected {
             background-color: #c2e7ff;
           }
         }
-
         &.orderList__item--selected {
           background-color: rgba(32, 33, 36, 0.059);
+        }
+
+        &:has(input:checked) {
+          box-shadow: inset 0 0 0 1px #c4eed0;
         }
       }
     }
@@ -259,7 +289,7 @@ const orderDisplay = computed(() => {
   bottom: 2rem;
   right: 0.5rem;
   background-color: #d2e3fc;
-  padding: 0.875rem 1rem;
+  padding: 0.875rem 1.125rem;
   border-radius: 1rem;
   box-shadow:
     0 4px 8px 3px rgba(0, 0, 0, 0.15),
@@ -269,9 +299,6 @@ const orderDisplay = computed(() => {
   font-size: 1.125rem;
   display: flex;
   align-items: center;
-
-  svg {
-    margin-right: 1rem;
-  }
+  gap: 0.5rem;
 }
 </style>
