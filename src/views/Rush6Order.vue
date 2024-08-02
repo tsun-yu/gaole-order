@@ -184,6 +184,7 @@ const orderDisplay = computed(() => {
   }
   .selected__item--isClicked {
     background-color: #c4eed0;
+    box-shadow: inset 0 0 0 1px #c4eed0;
     border-color: #c4eed0;
 
     &.selected__item--isInCol {
@@ -277,7 +278,7 @@ const orderDisplay = computed(() => {
         }
 
         &:has(input:checked) {
-          box-shadow: inset 0 0 0 1px #c4eed0;
+          box-shadow: inset 0 0 0 2px #c4eed0;
         }
       }
     }
