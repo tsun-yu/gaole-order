@@ -1,7 +1,8 @@
 <script setup>
-import { computed, ref } from 'vue';
+import { computed, ref, watchEffect } from 'vue';
 import orderList from '@/assets/order';
 import FilterComponent from '@/components/FilterComponent.vue';
+import MagnifySelected from '@/components/MagnifySelected.vue';
 
 const hasSelected = ref([]);
 const hasSelectedSorted = computed(() => {
@@ -26,7 +27,12 @@ const hasSelectedSorted = computed(() => {
 });
 
 const isSelectedCol = ref([]);
-
+const magnifySelectedShow = ref(false);
+watchEffect(() => {
+  if (!isSelectedCol.value.length) {
+    magnifySelectedShow.value = false;
+  }
+});
 const orderDisplay = computed(() => {
   const orderListClone = JSON.parse(JSON.stringify(orderList));
   if (!hasSelected.value.length) {
@@ -57,7 +63,13 @@ const orderDisplay = computed(() => {
 </script>
 
 <template>
-  <FilterComponent v-model:data="hasSelected"></FilterComponent>
+  <filter-component v-model:data="hasSelected"></filter-component>
+  <magnify-selected
+    v-if="magnifySelectedShow"
+    v-model:isSelectedCol="isSelectedCol"
+    :orderDisplay="orderDisplay"
+    :orderList="orderList"
+  ></magnify-selected>
   <div class="selected" v-show="!!hasSelected.length">
     <label
       class="selected__item"
@@ -77,15 +89,15 @@ const orderDisplay = computed(() => {
     </label>
   </div>
   <div class="orderList">
-    <div v-for="(item, i) of orderDisplay" :key="'order' + i" class="orderList__col">
+    <div v-for="item of orderDisplay" :key="'order' + item.id" class="orderList__col">
       <input
         type="checkbox"
-        :name="'column' + i"
-        :id="'column' + i"
+        :name="'column' + item.id"
+        :id="'column' + item.id"
         :value="item.id"
         v-model="isSelectedCol"
       />
-      <label :for="'column' + i" class="orderList__selectBtn">
+      <label :for="'column' + item.id" class="orderList__selectBtn">
         <v-icon name="md-checkcircle" scale="1" fill="#d1d6d4" />
       </label>
       <div class="orderList__wrap">
@@ -105,7 +117,18 @@ const orderDisplay = computed(() => {
       </div>
     </div>
   </div>
-  <!-- <div class="doneBtn" v-show="isSelectedCol.length >= 2">Done</div> -->
+  <div
+    class="doneBtn"
+    v-show="isSelectedCol.length >= 2"
+    @click="magnifySelectedShow = !magnifySelectedShow"
+  >
+    <template v-if="!magnifySelectedShow">
+      <v-icon name="md-zoomoutmap-round" scale="1" fill="#0b57d0" />Select
+    </template>
+    <template v-if="magnifySelectedShow">
+      <v-icon name="md-zoominmap-round" scale="1" fill="#0b57d0" />Close
+    </template>
+  </div>
 </template>
 
 <style lang="scss" scoped>
@@ -122,7 +145,7 @@ const orderDisplay = computed(() => {
 
   .selected__item {
     padding: 0.125rem 0.25rem 0.125rem 0;
-    border-radius: 0.25rem;
+    border-radius: 0.375rem;
     color: #676767;
     border: 1px solid #676767;
     font-size: 1rem;
@@ -232,7 +255,7 @@ const orderDisplay = computed(() => {
   bottom: 2rem;
   right: 0.5rem;
   background-color: #d2e3fc;
-  padding: 1rem 2rem;
+  padding: 0.875rem 1rem;
   border-radius: 1rem;
   box-shadow:
     0 4px 8px 3px rgba(0, 0, 0, 0.15),
@@ -240,5 +263,9 @@ const orderDisplay = computed(() => {
   color: #0b57d0;
   cursor: pointer;
   font-weight: 700;
+
+  svg {
+    margin-right: 1rem;
+  }
 }
 </style>

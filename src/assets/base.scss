@@ -33,6 +33,10 @@ body {
     'Droid Sans',
     'Helvetica Neue',
     sans-serif;
-
+  overflow: auto;
   background-color: #f6f8fc;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }

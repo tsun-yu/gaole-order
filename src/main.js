@@ -10,7 +10,10 @@ import {
   MdFilterlistRound,
   PrTimes,
   MdCheckcircleoutlineOutlined,
-  MdCheckcircle
+  MdCheckcircle,
+  MdZoomoutmapRound,
+  FaTimesCircle,
+  MdZoominmapRound
 } from 'oh-vue-icons/icons';
 
 addIcons(
@@ -18,7 +21,10 @@ addIcons(
   MdFilterlistRound,
   PrTimes,
   MdCheckcircleoutlineOutlined,
-  MdCheckcircle
+  MdCheckcircle,
+  MdZoomoutmapRound,
+  FaTimesCircle,
+  MdZoominmapRound
 );
 
 const app = createApp(App);

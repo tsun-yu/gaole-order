@@ -177,7 +177,7 @@ watchEffect(() => {
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .filter {
   position: fixed;
   top: 0;
