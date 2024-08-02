@@ -7,7 +7,7 @@ import MagnifySelected from '@/components/MagnifySelected.vue';
 const hasSelected = ref([]);
 const hasSelectedSorted = computed(() => {
   const itemClickedCheckList = [...hasSelected.value].map((item) => {
-    const isClicked = selectedItemClick.value.some((itemClicked) => itemClicked === item);
+    const isClicked = selectedItemClick.value.some((itemClicked) => itemClicked.includes(item));
     return { name: item, isClicked };
   });
 
@@ -98,39 +98,39 @@ const orderDisplay = computed(() => {
     </label>
   </div>
   <div class="orderList">
-    <div v-for="item of orderDisplay" :key="'order' + item.id" class="orderList__col">
+    <div v-for="col of orderDisplay" :key="'order' + col.id" class="orderList__col">
       <input
         class="orderList__selectCol"
         type="checkbox"
-        :name="'column' + item.id"
-        :id="'column' + item.id"
-        :value="item.id"
+        :name="'column' + col.id"
+        :id="'column' + col.id"
+        :value="col.id"
         v-model="isSelectedCol"
       />
-      <label :for="'column' + item.id" class="orderList__selectBtn">
+      <label :for="'column' + col.id" class="orderList__selectBtn">
         <v-icon name="md-checkcircle" scale="1" fill="#d1d6d4" />
       </label>
       <div class="orderList__wrap">
         <label
           class="orderList__item"
           :class="{
-            'orderList__item--selected': item2?.selected,
-            'orderList__item--star5': item2.name[0] !== 's' && item2.name[0] !== 'c',
-            'orderList__item--star4': item2.name.includes('s4') || item2.name.includes('cp'),
-            'orderList__item--star3': item2.name.includes('s3')
+            'orderList__item--selected': item?.selected,
+            'orderList__item--star5': item.name[0] !== 's' && item.name[0] !== 'c',
+            'orderList__item--star4': item.name.includes('s4') || item.name.includes('cp'),
+            'orderList__item--star3': item.name.includes('s3')
           }"
-          v-for="(item2, i2) of item.order"
-          :key="'column' + item.id + i2"
-          :for="'column' + item.id + i2"
+          v-for="(item, i) of col.order"
+          :key="'column' + col.id + i"
+          :for="'column' + col.id + i"
         >
           <input
             type="checkbox"
-            :id="'column' + item.id + i2"
-            :name="'column' + item.id + i2"
-            :value="item2.name"
+            :id="'column' + col.id + i"
+            :name="'column' + col.id + i"
+            :value="item.name + col.id + i"
             v-model="selectedItemClick"
           />
-          {{ item2.name }}
+          {{ item.name }}
         </label>
       </div>
     </div>
@@ -183,9 +183,7 @@ const orderDisplay = computed(() => {
     border-color: #d2e3fc;
   }
   .selected__item--isClicked {
-    background-color: #c4eed0;
-    box-shadow: inset 0 0 0 1px #c4eed0;
-    border-color: #c4eed0;
+    border-color: #0b57d0;
 
     &.selected__item--isInCol {
       background-color: #d2e3fc;
@@ -255,12 +253,19 @@ const orderDisplay = computed(() => {
         }
 
         &.orderList__item--star5 {
-          box-shadow: inset 0 0 0 1px #0b57d0;
+          background:
+            linear-gradient(#fff, #fff) padding-box,
+            linear-gradient(45deg, #42d392, #647eff) border-box;
+          border: 1px solid transparent;
+          padding-block: 0.0625rem;
 
           &.orderList__item--selected {
-            background-color: #d2e3fc;
+            background:
+              linear-gradient(#d2e3fc, #d2e3fc) padding-box,
+              linear-gradient(45deg, #42d392, #647eff) border-box;
             color: #0b57d0;
-            box-shadow: inset 0 0 0 2px #0b57d0;
+            border: 2px solid transparent;
+            padding-block: 0;
           }
         }
         &.orderList__item--star4 {
@@ -277,8 +282,8 @@ const orderDisplay = computed(() => {
           background-color: rgba(32, 33, 36, 0.059);
         }
 
-        &:has(input:checked) {
-          box-shadow: inset 0 0 0 2px #c4eed0;
+        &:not(.orderList__item--star5):has(input:checked) {
+          box-shadow: inset 0 0 0 1px #0b57d0;
         }
       }
     }
