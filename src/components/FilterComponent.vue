@@ -109,7 +109,7 @@ watchEffect(() => {
     </label>
     <div class="filterOpts">
       <div class="filter__accordion">
-        <input type="checkbox" id="star5collapse" />
+        <input type="radio" name="starCollapse" id="star5collapse" />
         <label for="star5collapse"
           ><p>⭐⭐⭐⭐⭐</p>
           <p class="filter__arrow">
@@ -126,7 +126,7 @@ watchEffect(() => {
         </div>
       </div>
       <div class="filter__accordion">
-        <input type="checkbox" id="star4collapse" />
+        <input type="radio" name="starCollapse" id="star4collapse" />
         <label for="star4collapse">
           <p>⭐⭐⭐⭐</p>
           <p class="filter__arrow">
@@ -142,7 +142,7 @@ watchEffect(() => {
         </div>
       </div>
       <div class="filter__accordion">
-        <input type="checkbox" id="star3collapse" />
+        <input type="radio" name="starCollapse" id="star3collapse" />
         <label for="star3collapse">
           <p>⭐⭐⭐</p>
           <p class="filter__arrow">
@@ -158,7 +158,7 @@ watchEffect(() => {
         </div>
       </div>
       <div class="filter__accordion">
-        <input type="checkbox" id="star12collapse" />
+        <input type="radio" name="starCollapse" id="star12collapse" />
         <label for="star12collapse">
           <p>⭐⭐ & ⭐</p>
           <p class="filter__arrow">
@@ -229,12 +229,12 @@ watchEffect(() => {
     height: fit-content;
     max-height: 95dvh;
     overflow: auto;
-    &::-webkit-scrollbar {
-      display: none;
-    }
     transition: 0.3s ease-in-out;
     z-index: 998;
 
+    &::-webkit-scrollbar {
+      display: none;
+    }
     .filter__accordion {
       background-color: #fff;
       margin: 0.125rem;
@@ -270,7 +270,7 @@ watchEffect(() => {
           }
         }
       }
-      input[type='checkbox'] {
+      input[type='radio'] {
         display: none;
 
         &:checked ~ .filter__opts {
