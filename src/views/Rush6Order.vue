@@ -130,7 +130,7 @@ const orderDisplay = computed(() => {
             :value="item.name + col.id + i"
             v-model="selectedItemClick"
           />
-          {{ item.name }}
+          <span>{{ item.name }}</span>
         </label>
       </div>
     </div>
@@ -184,6 +184,11 @@ const orderDisplay = computed(() => {
   }
   .selected__item--isClicked {
     border-color: #0b57d0;
+    color: #0b57d0;
+
+    svg {
+      fill: #0b57d0;
+    }
 
     &.selected__item--isInCol {
       background-color: #d2e3fc;
@@ -256,8 +261,16 @@ const orderDisplay = computed(() => {
           background:
             linear-gradient(#fff, #fff) padding-box,
             linear-gradient(45deg, #42d392, #647eff) border-box;
-          border: 1px solid transparent;
+          border: 2px solid transparent;
           padding-block: 0.0625rem;
+
+          span {
+            background: -webkit-linear-gradient(315deg, #42d392 25%, #647eff);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 900;
+          }
 
           &.orderList__item--selected {
             background:

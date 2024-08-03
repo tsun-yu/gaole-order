@@ -21,23 +21,23 @@ const isSelectedColDisplay = computed(() => {
 <template>
   <div class="container">
     <div class="orderList">
-      <div v-for="item of isSelectedColDisplay" :key="'order' + item.id" class="orderList__col">
-        <label :for="'column' + item.id" class="orderList__selectBtn">
+      <div v-for="col of isSelectedColDisplay" :key="'order' + col.id" class="orderList__col">
+        <label :for="'column' + col.id" class="orderList__selectBtn">
           <v-icon name="fa-times-circle" scale="1" fill="#d1d6d4" />
         </label>
         <div class="orderList__wrap">
           <div
             class="orderList__item"
             :class="{
-              'orderList__item--selected': item2?.selected,
-              'orderList__item--star5': item2.name[0] !== 's' && item2.name[0] !== 'c',
-              'orderList__item--star4': item2.name.includes('s4') || item2.name.includes('cp'),
-              'orderList__item--star3': item2.name.includes('s3')
+              'orderList__item--selected': item?.selected,
+              'orderList__item--star5': item.name[0] !== 's' && item.name[0] !== 'c',
+              'orderList__item--star4': item.name.includes('s4') || item.name.includes('cp'),
+              'orderList__item--star3': item.name.includes('s3')
             }"
-            v-for="(item2, i2) of item.order"
+            v-for="(item, i2) of col.order"
             :key="'orderr' + i2"
           >
-            {{ item2.name }}
+            <span>{{ item.name }}</span>
           </div>
         </div>
       </div>
@@ -78,9 +78,6 @@ const isSelectedColDisplay = computed(() => {
     }
 
     .orderList__col {
-      /* box-shadow: 0 0 0 1px #d1d6d4; */
-      /* border-radius: 0.625rem; */
-
       &:has(input:checked) {
         box-shadow: 0 0 0 1px #0b57d0;
       }
@@ -130,12 +127,27 @@ const isSelectedColDisplay = computed(() => {
           }
 
           &.orderList__item--star5 {
-            box-shadow: inset 0 0 0 1px #0b57d0;
+            background:
+              linear-gradient(#fff, #fff) padding-box,
+              linear-gradient(45deg, #42d392, #647eff) border-box;
+            border: 2px solid transparent;
+            padding-block: 0.0625rem;
+
+            span {
+              background: -webkit-linear-gradient(315deg, #42d392 25%, #647eff);
+              background-clip: text;
+              -webkit-background-clip: text;
+              -webkit-text-fill-color: transparent;
+              font-weight: 900;
+            }
 
             &.orderList__item--selected {
-              background-color: #d2e3fc;
+              background:
+                linear-gradient(#d2e3fc, #d2e3fc) padding-box,
+                linear-gradient(45deg, #42d392, #647eff) border-box;
               color: #0b57d0;
-              box-shadow: inset 0 0 0 2px #0b57d0;
+              border: 2px solid transparent;
+              padding-block: 0;
             }
           }
           &.orderList__item--star4 {
