@@ -3,6 +3,10 @@ import { onMounted, ref, watchEffect } from 'vue';
 import MultiSelect from '../components/form/MultiSelect.vue';
 import allPokemon from '../assets/allPokemon';
 
+const hasSelected = defineModel('data', {
+  type: Array
+});
+
 const star5 = ref(allPokemon[0].star5);
 const star4 = ref(allPokemon[0].star4);
 const star3 = ref(allPokemon[0].star3);
@@ -15,10 +19,7 @@ const filterShow = ref(false);
 const filterBtnLeft = ref('');
 const filterBtnTop = ref('5rem');
 const filterBtnTransition = ref('0s');
-
-const hasSelected = defineModel('data', {
-  type: Array
-});
+const accordion = ref(null);
 
 onMounted(() => {
   const btnW = filterBtn.value.clientWidth;
@@ -98,6 +99,12 @@ watchEffect(() => {
     document.querySelectorAll('.filter__accordion>input').forEach((v) => (v.checked = false));
   }
 });
+
+const handler = (e) => {
+  if (e.target.id === accordion.value) {
+    accordion.value = null;
+  }
+};
 </script>
 
 <template>
@@ -109,7 +116,14 @@ watchEffect(() => {
     </label>
     <div class="filterOpts">
       <div class="filter__accordion">
-        <input type="radio" name="starCollapse" id="star5collapse" />
+        <input
+          type="radio"
+          name="starCollapse"
+          id="star5collapse"
+          @click="handler"
+          v-model="accordion"
+          value="star5collapse"
+        />
         <label for="star5collapse"
           ><p>⭐⭐⭐⭐⭐</p>
           <p class="filter__arrow">
@@ -126,7 +140,14 @@ watchEffect(() => {
         </div>
       </div>
       <div class="filter__accordion">
-        <input type="radio" name="starCollapse" id="star4collapse" />
+        <input
+          type="radio"
+          name="starCollapse"
+          id="star4collapse"
+          value="star4collapse"
+          v-model="accordion"
+          @click="handler"
+        />
         <label for="star4collapse">
           <p>⭐⭐⭐⭐</p>
           <p class="filter__arrow">
@@ -142,7 +163,14 @@ watchEffect(() => {
         </div>
       </div>
       <div class="filter__accordion">
-        <input type="radio" name="starCollapse" id="star3collapse" />
+        <input
+          type="radio"
+          name="starCollapse"
+          id="star3collapse"
+          value="star3collapse"
+          v-model="accordion"
+          @click="handler"
+        />
         <label for="star3collapse">
           <p>⭐⭐⭐</p>
           <p class="filter__arrow">
@@ -158,7 +186,14 @@ watchEffect(() => {
         </div>
       </div>
       <div class="filter__accordion">
-        <input type="radio" name="starCollapse" id="star12collapse" />
+        <input
+          type="radio"
+          name="starCollapse"
+          id="star12collapse"
+          value="star12collapse"
+          v-model="accordion"
+          @click="handler"
+        />
         <label for="star12collapse">
           <p>⭐⭐ & ⭐</p>
           <p class="filter__arrow">
@@ -173,6 +208,7 @@ watchEffect(() => {
           ></multi-select>
         </div>
       </div>
+      <p class="filter__clearBtn"><span @click="hasSelected.length = 0">Clear</span></p>
     </div>
   </div>
 </template>
@@ -217,7 +253,7 @@ watchEffect(() => {
   }
   .filterOpts {
     position: fixed;
-    top: -20rem;
+    top: -23.875rem;
     width: 95%;
     padding: 0.625rem;
     border-radius: 1.5rem;
@@ -244,11 +280,10 @@ watchEffect(() => {
         border-top-left-radius: 1.125rem;
         border-top-right-radius: 1.125rem;
       }
-      &:last-child {
+      &:last-of-type {
         border-bottom-left-radius: 1.125rem;
         border-bottom-right-radius: 1.125rem;
       }
-
       label {
         cursor: pointer;
         padding: 1rem;
@@ -285,6 +320,23 @@ watchEffect(() => {
         grid-template-rows: 0fr;
         overflow: hidden;
         transition: 0.3s ease-in-out;
+      }
+    }
+    .filter__clearBtn {
+      display: flex;
+      justify-content: end;
+
+      span {
+        cursor: pointer;
+        border-radius: 2rem;
+        padding: 0.75rem 1.5rem;
+        margin-top: 0.25rem;
+        font-size: 1.125rem;
+        color: #676767;
+
+        &:hover {
+          background: rgba(68, 71, 70, 0.08);
+        }
       }
     }
   }
