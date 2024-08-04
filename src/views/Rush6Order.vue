@@ -135,19 +135,28 @@ const orderDisplay = computed(() => {
       </div>
     </div>
   </div>
-  <div
-    class="doneBtn"
-    v-show="isSelectedCol.length >= 2 && !magnifySelectedShow"
-    @click="magnifySelectedShow = !magnifySelectedShow"
-  >
-    <v-icon name="md-zoomoutmap-round" scale="1" fill="#0b57d0" />Select
-  </div>
-  <div
-    class="doneBtn"
-    v-show="isSelectedCol.length >= 1 && magnifySelectedShow"
-    @click="magnifySelectedShow = !magnifySelectedShow"
-  >
-    <v-icon name="md-zoominmap-round" scale="1" fill="#0b57d0" />Close
+  <div class="btnGroup">
+    <div
+      class="btnGroup__btn"
+      v-show="!!selectedItemClick.length && !magnifySelectedShow"
+      @click="selectedItemClick.length = 0"
+    >
+      <v-icon name="md-refresh-round" scale="1" fill="#0b57d0" />Reset
+    </div>
+    <div
+      class="btnGroup__btn"
+      v-show="isSelectedCol.length >= 2 && !magnifySelectedShow"
+      @click="magnifySelectedShow = true"
+    >
+      <v-icon name="md-zoomoutmap-round" scale="1" fill="#0b57d0" />Select
+    </div>
+    <div
+      class="btnGroup__btn"
+      v-show="isSelectedCol.length >= 1 && magnifySelectedShow"
+      @click="magnifySelectedShow = false"
+    >
+      <v-icon name="md-zoominmap-round" scale="1" fill="#0b57d0" />Close
+    </div>
   </div>
 </template>
 
@@ -302,22 +311,30 @@ const orderDisplay = computed(() => {
     }
   }
 }
-.doneBtn {
+
+.btnGroup {
   position: fixed;
   z-index: 997;
   bottom: 2rem;
   right: 0.5rem;
-  background-color: #d2e3fc;
-  padding: 0.875rem 1.125rem;
-  border-radius: 1rem;
-  box-shadow:
-    0 4px 8px 3px rgba(0, 0, 0, 0.15),
-    0 1px 3px rgba(0, 0, 0, 0.3);
-  color: #0b57d0;
-  cursor: pointer;
-  font-size: 1.125rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+
+  .btnGroup__btn {
+    padding: 1rem 1.125rem;
+    border-radius: 1rem;
+    box-shadow:
+      0 4px 8px 3px rgba(0, 0, 0, 0.15),
+      0 1px 3px rgba(0, 0, 0, 0.3);
+    color: #0b57d0;
+    cursor: pointer;
+    font-size: 1.125rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: #d2e3fc;
+
+    &:first-child {
+      margin-bottom: 0.5rem;
+    }
+  }
 }
 </style>

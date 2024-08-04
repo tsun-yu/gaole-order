@@ -208,7 +208,10 @@ const handler = (e) => {
           ></multi-select>
         </div>
       </div>
-      <p class="filter__clearBtn"><span @click="hasSelected.length = 0">Clear</span></p>
+      <p class="filter__btn">
+        <span id="clearBtn" @click="hasSelected.length = 0">Clear</span>
+        <span id="doneBtn" @click="filterShow = !filterShow">Done</span>
+      </p>
     </div>
   </div>
 </template>
@@ -322,20 +325,33 @@ const handler = (e) => {
         transition: 0.3s ease-in-out;
       }
     }
-    .filter__clearBtn {
+    .filter__btn {
       display: flex;
       justify-content: end;
 
       span {
         cursor: pointer;
         border-radius: 2rem;
-        padding: 0.75rem 1.5rem;
+        padding: 0.625rem 1.5rem;
         margin-top: 0.25rem;
         font-size: 1.125rem;
-        color: #676767;
 
-        &:hover {
-          background: rgba(68, 71, 70, 0.08);
+        &#clearBtn {
+          margin-right: 0.25rem;
+          color: #676767;
+
+          &:hover {
+            background: rgba(68, 71, 70, 0.08);
+          }
+        }
+        &#doneBtn {
+          background-color: #0b57d0;
+          color: #fff;
+
+          &:hover {
+            background-color: #0b57d0;
+            color: #f6f8fc;
+          }
         }
       }
     }
