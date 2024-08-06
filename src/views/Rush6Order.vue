@@ -53,10 +53,10 @@ const orderDisplay = computed(() => {
     if (!filteredItems.length) return acc;
 
     col.count = filteredItems.reduce((acc, item) => {
-      if (item.name[0] !== 's' && item.name[0] !== 'c') return acc + 100;
-      if (item.name.includes('s4') || item.name.includes('cp')) return acc + 10;
-      if (item.name.includes('s3')) return acc + 1;
-      return acc;
+      if (item.name[0] !== 's' && item.name[0] !== 'c') return acc + 10;
+      if (item.name.includes('s4') || item.name.includes('cp') || item.name.includes('s3'))
+        return acc + 2;
+      return acc + 1;
     }, 0);
 
     return [...acc, col].sort((a, b) => b.count - a.count);
