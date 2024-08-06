@@ -1,9 +1,10 @@
 <script setup>
-import { computed, ref, watchEffect } from 'vue';
+import { computed, onMounted, ref, watchEffect } from 'vue';
 import orderList from '@/assets/order';
 import FilterComponent from '@/components/FilterComponent.vue';
 import MagnifySelected from '@/components/MagnifySelected.vue';
 
+const orderListWrap = ref(null);
 const hasSelected = ref([]);
 const hasSelectedSorted = computed(() => {
   const itemClickedCheckList = [...hasSelected.value].map((item) => {
@@ -31,7 +32,6 @@ const hasSelectedSorted = computed(() => {
   });
 });
 const selectedItemClick = ref([]);
-
 const isSelectedCol = ref([]);
 const magnifySelectedShow = ref(false);
 watchEffect(() => {
@@ -66,6 +66,20 @@ const orderDisplay = computed(() => {
     return { order: item.order, id: item.id };
   });
 });
+const btnContentWidth = ref('1fr');
+
+onMounted(() => {
+  window.addEventListener('scroll', () => {
+    const canScroll = orderListWrap.value.clientHeight - window.innerHeight;
+
+    if (window.scrollY > canScroll / 2) {
+      btnContentWidth.value = '0fr';
+      return;
+    }
+
+    btnContentWidth.value = '1fr';
+  });
+});
 </script>
 
 <template>
@@ -97,7 +111,7 @@ const orderDisplay = computed(() => {
       <v-icon name="pr-times" scale="1" fill="#676767" />{{ item.name }}
     </label>
   </div>
-  <div class="orderList">
+  <div class="orderList" ref="orderListWrap">
     <div v-for="col of orderDisplay" :key="'order' + col.id" class="orderList__col">
       <input
         class="orderList__selectCol"
@@ -141,21 +155,28 @@ const orderDisplay = computed(() => {
       v-show="!!selectedItemClick.length && !magnifySelectedShow"
       @click="selectedItemClick.length = 0"
     >
-      <v-icon name="md-refresh-round" scale="1" fill="#0b57d0" />Reset
+      <div class="btnGroup__icon"><v-icon name="md-refresh-round" scale="1" fill="#0b57d0" /></div>
+      <div class="btnGroup__content"><p>Reset</p></div>
     </div>
     <div
       class="btnGroup__btn"
       v-show="isSelectedCol.length >= 2 && !magnifySelectedShow"
       @click="magnifySelectedShow = true"
     >
-      <v-icon name="md-zoomoutmap-round" scale="1" fill="#0b57d0" />Select
+      <div class="btnGroup__icon">
+        <v-icon name="md-zoomoutmap-round" scale="1" fill="#0b57d0" />
+      </div>
+      <div class="btnGroup__content"><p>Select</p></div>
     </div>
     <div
       class="btnGroup__btn"
       v-show="isSelectedCol.length >= 1 && magnifySelectedShow"
       @click="magnifySelectedShow = false"
     >
-      <v-icon name="md-zoominmap-round" scale="1" fill="#0b57d0" />Close
+      <div class="btnGroup__icon">
+        <v-icon name="md-zoominmap-round" scale="1" fill="#0b57d0" />
+      </div>
+      <div class="btnGroup__content"><p>Close</p></div>
     </div>
   </div>
 </template>
@@ -317,9 +338,13 @@ const orderDisplay = computed(() => {
   z-index: 997;
   bottom: 2rem;
   right: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 
   .btnGroup__btn {
-    padding: 1rem 1.125rem;
+    height: 3.5rem;
+    padding: 1rem;
     border-radius: 1rem;
     box-shadow:
       0 4px 8px 3px rgba(0, 0, 0, 0.15),
@@ -329,11 +354,23 @@ const orderDisplay = computed(() => {
     font-size: 1.125rem;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
     background-color: #d2e3fc;
 
-    &:first-child {
-      margin-bottom: 0.5rem;
+    .btnGroup__icon {
+      display: grid;
+      place-items: center;
+      width: 1.5rem;
+    }
+
+    .btnGroup__content {
+      display: grid;
+      grid-template-columns: v-bind(btnContentWidth);
+      overflow: hidden;
+      transition: 0.3s ease-in-out;
+
+      p {
+        min-width: 0;
+      }
     }
   }
 }
