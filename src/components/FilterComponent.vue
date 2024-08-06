@@ -96,7 +96,7 @@ onMounted(() => {
 
 watchEffect(() => {
   if (!filterShow.value) {
-    document.querySelectorAll('.filter__accordion>input').forEach((v) => (v.checked = false));
+    accordion.value = null;
   }
 });
 
