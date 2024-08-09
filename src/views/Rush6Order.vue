@@ -1,9 +1,10 @@
 <script setup>
 import { computed, onMounted, ref, watchEffect } from 'vue';
-import orderList from '@/assets/order';
+// import orderList from '@/assets/order';
 import FilterComponent from '@/components/FilterComponent.vue';
 import MagnifySelected from '@/components/MagnifySelected.vue';
 
+const orderList = ref([]);
 const orderListWrap = ref(null);
 const hasSelected = ref([]);
 const hasSelectedSorted = computed(() => {
@@ -22,7 +23,7 @@ const hasSelectedSorted = computed(() => {
 
   const itemInSelectedCol = itemClickedCheckList.map((itemCheck) => {
     const isInCol = isSelectedCol.value.some((colId) =>
-      orderList[colId - 1].order.some((itemOriginal) => itemOriginal.name === itemCheck.name)
+      orderList.value[colId - 1].order.some((itemOriginal) => itemOriginal.name === itemCheck.name)
     );
     return { ...itemCheck, isInCol };
   });
@@ -40,7 +41,7 @@ watchEffect(() => {
   }
 });
 const orderDisplay = computed(() => {
-  const orderListClone = JSON.parse(JSON.stringify(orderList));
+  const orderListClone = JSON.parse(JSON.stringify(orderList.value));
   if (!hasSelected.value.length) {
     return orderListClone;
   }
@@ -53,9 +54,8 @@ const orderDisplay = computed(() => {
     if (!filteredItems.length) return acc;
 
     col.count = filteredItems.reduce((acc, item) => {
-      if (item.name[0] !== 's' && item.name[0] !== 'c') return acc + 10;
-      if (item.name.includes('s4') || item.name.includes('cp') || item.name.includes('s3'))
-        return acc + 2;
+      if (item.name[0] !== 's') return acc + 10;
+      if (item.name.includes('s4') || item.name.includes('s3')) return acc + 2;
       return acc + 1;
     }, 0);
 
@@ -68,7 +68,20 @@ const orderDisplay = computed(() => {
 });
 const btnContentWidth = ref('1fr');
 
-onMounted(() => {
+const getOrder = async () => {
+  const response = await fetch('https://api.github.com/repos/tsun-yu/gaole-order/issues/1');
+  const data = await response.json();
+  orderList.value = JSON.parse(data.body).rush6;
+};
+
+const getAllPokemon = async () => {
+  const response = await fetch('https://api.github.com/repos/tsun-yu/gaole-order/issues/2');
+  const data = await response.json();
+  console.log('data', JSON.parse(data.body).rush6);
+};
+onMounted(async () => {
+  await getOrder();
+  await getAllPokemon();
   window.addEventListener('scroll', () => {
     const canScroll = orderListWrap.value.clientHeight - window.innerHeight;
 
@@ -129,8 +142,8 @@ onMounted(() => {
           class="orderList__item"
           :class="{
             'orderList__item--selected': item?.selected,
-            'orderList__item--star5': item.name[0] !== 's' && item.name[0] !== 'c',
-            'orderList__item--star4': item.name.includes('s4') || item.name.includes('cp'),
+            'orderList__item--star5': item.name[0] !== 's',
+            'orderList__item--star4': item.name.includes('s4'),
             'orderList__item--star3': item.name.includes('s3')
           }"
           v-for="(item, i) of col.order"
