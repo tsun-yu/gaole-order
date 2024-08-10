@@ -1,16 +1,24 @@
 <script setup>
 import { onMounted, ref, watchEffect } from 'vue';
 import MultiSelect from '../components/form/MultiSelect.vue';
-import allPokemon from '../assets/allPokemon';
 
 const hasSelected = defineModel('data', {
   type: Array
 });
+const props = defineProps(['allPokemon']);
 
-const star5 = ref(allPokemon[0].star5);
-const star4 = ref(allPokemon[0].star4);
-const star3 = ref(allPokemon[0].star3);
-const star12 = ref(allPokemon[0].star12);
+const star5 = ref([]);
+const star4 = ref([]);
+const star3 = ref([]);
+const star12 = ref([]);
+
+watchEffect(() => {
+  if (!props.allPokemon) return;
+  star5.value = props.allPokemon[0].star5;
+  star4.value = props.allPokemon[0].star4;
+  star3.value = props.allPokemon[0].star3;
+  star12.value = props.allPokemon[0].star12;
+});
 
 const filterBtn = ref(null);
 const filter = ref(null);

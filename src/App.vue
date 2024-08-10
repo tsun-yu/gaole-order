@@ -1,4 +1,20 @@
-<script setup></script>
+<script setup>
+import { usePokemonStore } from '@/stores/pokemon';
+import { onMounted } from 'vue';
+
+const store = usePokemonStore();
+const getAllPokemon = async () => {
+  await store.fetchAllPokemon();
+};
+const getOrder = async () => {
+  await store.fetchOrderList();
+};
+
+onMounted(async () => {
+  await getAllPokemon();
+  await getOrder();
+});
+</script>
 
 <template>
   <RouterView />

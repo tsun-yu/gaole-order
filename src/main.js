@@ -1,6 +1,7 @@
 import './assets/main.css';
 
 import { createApp } from 'vue';
+import { createPinia } from 'pinia';
 import App from './App.vue';
 import router from './router';
 
@@ -30,8 +31,9 @@ addIcons(
 );
 
 const app = createApp(App);
+const pinia = createPinia();
 
-app.use(router);
+app.use(router).use(pinia);
 
 app.component('v-icon', OhVueIcon);
 app.mount('#app');

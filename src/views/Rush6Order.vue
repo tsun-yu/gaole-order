@@ -3,8 +3,12 @@ import { computed, onMounted, ref, watchEffect } from 'vue';
 // import orderList from '@/assets/order';
 import FilterComponent from '@/components/FilterComponent.vue';
 import MagnifySelected from '@/components/MagnifySelected.vue';
+import { usePokemonStore } from '@/stores/pokemon';
+
+const store = usePokemonStore();
 
 const orderList = ref([]);
+const allPokemon = ref([]);
 const orderListWrap = ref(null);
 const hasSelected = ref([]);
 const hasSelectedSorted = computed(() => {
@@ -40,7 +44,17 @@ watchEffect(() => {
     magnifySelectedShow.value = false;
   }
 });
+
+watchEffect(() => {
+  if (store.orderList) {
+    orderList.value = store.orderList.rush6;
+  }
+  if (store.allPokemon) {
+    allPokemon.value = store.allPokemon.rush6;
+  }
+});
 const orderDisplay = computed(() => {
+  if (!orderList.value) return [];
   const orderListClone = JSON.parse(JSON.stringify(orderList.value));
   if (!hasSelected.value.length) {
     return orderListClone;
@@ -68,20 +82,7 @@ const orderDisplay = computed(() => {
 });
 const btnContentWidth = ref('1fr');
 
-const getOrder = async () => {
-  const response = await fetch('https://api.github.com/repos/tsun-yu/gaole-order/issues/1');
-  const data = await response.json();
-  orderList.value = JSON.parse(data.body).rush6;
-};
-
-const getAllPokemon = async () => {
-  const response = await fetch('https://api.github.com/repos/tsun-yu/gaole-order/issues/2');
-  const data = await response.json();
-  console.log('data', JSON.parse(data.body).rush6);
-};
 onMounted(async () => {
-  await getOrder();
-  await getAllPokemon();
   window.addEventListener('scroll', () => {
     const canScroll = orderListWrap.value.clientHeight - window.innerHeight;
 
@@ -96,7 +97,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <filter-component v-model:data="hasSelected"></filter-component>
+  <filter-component v-model:data="hasSelected" :allPokemon="allPokemon"></filter-component>
   <magnify-selected
     v-if="magnifySelectedShow"
     v-model:isSelectedCol="isSelectedCol"
