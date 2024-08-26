@@ -4,6 +4,10 @@ import { computed, onMounted, ref, watchEffect } from 'vue';
 import FilterComponent from '@/components/FilterComponent.vue';
 import MagnifySelected from '@/components/MagnifySelected.vue';
 import { usePokemonStore } from '@/stores/pokemon';
+import { useRoute } from 'vue-router';
+
+const route = useRoute();
+const gen = ref(route.params.id);
 
 const store = usePokemonStore();
 
@@ -47,10 +51,10 @@ watchEffect(() => {
 
 watchEffect(() => {
   if (store.orderList) {
-    orderList.value = store.orderList.rush6;
+    orderList.value = store.orderList[gen.value];
   }
   if (store.allPokemon) {
-    allPokemon.value = store.allPokemon.rush6;
+    allPokemon.value = store.allPokemon[gen.value];
   }
 });
 const orderDisplay = computed(() => {
