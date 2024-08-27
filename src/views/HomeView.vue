@@ -35,7 +35,7 @@ const selectedPart = ref('');
   height: 100dvh;
 
   .input__wrap {
-    width: min(100%, 30rem);
+    width: min(95%, 30rem);
     padding: 0.5rem 1rem;
     margin: auto;
     border-radius: 4rem;
@@ -47,7 +47,7 @@ const selectedPart = ref('');
 
     select {
       border: none;
-      height: 2.75rem;
+      height: 3rem;
       padding-inline: 1.5rem;
       font-size: 1.25rem;
       color: #555;
