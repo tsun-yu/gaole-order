@@ -310,7 +310,7 @@ onMounted(async () => {
             linear-gradient(#fff, #fff) padding-box,
             linear-gradient(45deg, #42d392, #647eff) border-box;
           border: 2px solid transparent;
-          padding-block: 0.0625rem;
+          padding-block: 0;
 
           span {
             background: -webkit-linear-gradient(315deg, #42d392 25%, #647eff);
