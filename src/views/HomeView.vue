@@ -16,6 +16,8 @@ const selectedPart = ref('');
 
 <template>
   <div class="container">
+    <h1>Welcome Ga-Olé 卡序表</h1>
+    <p>操作最人性化的Gaole(加傲樂)手機查詢卡序表</p>
     <div class="input__wrap">
       <select v-model="selectedPart">
         <option v-for="gen in genList" :key="gen" :value="gen">{{ gen }}</option>
@@ -23,6 +25,54 @@ const selectedPart = ref('');
       <button @click="router.push(`/order/${selectedPart}`)">
         <v-icon name="ri-send-plane-2-line" scale="1" fill="#676767" />
       </button>
+    </div>
+    <div>
+      <v-icon name="pi-venusaur" scale="2" />
+      <v-icon name="pi-charizard" scale="2" />
+      <v-icon name="pi-blastoise" scale="2" />
+    </div>
+    <div>
+      <v-icon name="pi-meganium" scale="2" />
+      <v-icon name="pi-typhlosion" scale="2" />
+      <v-icon name="pi-feraligatr" scale="2" />
+    </div>
+    <div>
+      <v-icon name="pi-sceptile" scale="2" />
+      <v-icon name="pi-blaziken" scale="2" />
+      <v-icon name="pi-swampert" scale="2" />
+    </div>
+    <div>
+      <v-icon name="pi-articuno" scale="2" />
+      <v-icon name="pi-zapdos" scale="2" />
+      <v-icon name="pi-moltres" scale="2" />
+    </div>
+    <div>
+      <v-icon name="pi-raikou" scale="2" />
+      <v-icon name="pi-entei" scale="2" />
+      <v-icon name="pi-suicune" scale="2" />
+    </div>
+    <div>
+      <v-icon name="pi-mewtwo" scale="2" />
+      <v-icon name="pi-mew" scale="2" />
+    </div>
+    <v-icon name="pi-dragonite" scale="2" />
+    <div>
+      <v-icon name="pi-lugia" scale="2" />
+      <v-icon name="pi-ho-oh" scale="2" />
+    </div>
+    <div>
+      <v-icon name="pi-regirock" scale="2" />
+      <v-icon name="pi-regice" scale="2" />
+      <v-icon name="pi-registeel" scale="2" />
+    </div>
+    <div>
+      <v-icon name="pi-latias" scale="2" />
+      <v-icon name="pi-latios" scale="2" />
+    </div>
+    <div>
+      <v-icon name="pi-kyogre" scale="2" />
+      <v-icon name="pi-groudon" scale="2" />
+      <v-icon name="pi-rayquaza" scale="2" />
     </div>
   </div>
 </template>
@@ -32,12 +82,13 @@ const selectedPart = ref('');
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
   height: 100dvh;
 
   .input__wrap {
     width: min(95%, 30rem);
     padding: 0.5rem 1rem;
-    margin: auto;
+    margin-block: 1rem;
     border-radius: 4rem;
     display: flex;
     align-items: center;
