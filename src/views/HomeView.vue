@@ -1,7 +1,7 @@
 <script setup>
 import { usePokemonStore } from '@/stores/pokemon';
 import { computed, ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { RouterLink, useRouter } from 'vue-router';
 
 const store = usePokemonStore();
 const router = useRouter();
@@ -17,7 +17,11 @@ const selectedPart = ref('');
 <template>
   <div class="container">
     <h1>Welcome Ga-Olé 卡序表</h1>
-    <p>操作最人性化的Gaole(加傲樂)手機查詢卡序表</p>
+    <p>操作最人性化的Gaole卡序表</p>
+    <div class="links">
+      <RouterLink to="/manual">操作說明</RouterLink>
+      <RouterLink to="/support">支援寶可夢</RouterLink>
+    </div>
     <div class="input__wrap">
       <select v-model="selectedPart">
         <option v-for="gen in genList" :key="gen" :value="gen">{{ gen }}</option>
@@ -84,6 +88,27 @@ const selectedPart = ref('');
   align-items: center;
   flex-direction: column;
   height: 100dvh;
+
+  .links {
+    margin-block: 1rem 0.5rem;
+
+    a {
+      background-color: #eaf1fb;
+      background-color: #d2e3fc;
+
+      font-size: 1.25rem;
+      text-decoration: none;
+      margin-inline: 0.5rem;
+      color: #000;
+      padding: 0.5rem 1rem;
+      border-radius: 2rem;
+      color: #0b57d0;
+
+      &:hover {
+        background-color: #d2e3fc;
+      }
+    }
+  }
 
   .input__wrap {
     width: min(95%, 30rem);
