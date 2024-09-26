@@ -18,10 +18,6 @@ const selectedPart = ref('');
   <div class="container">
     <h1>Welcome Ga-Olé 卡序表</h1>
     <p>操作最人性化的Gaole卡序表</p>
-    <div class="links">
-      <RouterLink to="/manual">操作說明</RouterLink>
-      <RouterLink to="/support">支援寶可夢</RouterLink>
-    </div>
     <div class="input__wrap">
       <select v-model="selectedPart">
         <option v-for="gen in genList" :key="gen" :value="gen">{{ gen }}</option>
@@ -29,6 +25,10 @@ const selectedPart = ref('');
       <button @click="router.push(`/order/${selectedPart}`)">
         <v-icon name="ri-send-plane-2-line" scale="1" fill="#676767" />
       </button>
+    </div>
+    <div class="links">
+      <RouterLink to="/manual" target="_blank">操作說明</RouterLink>
+      <RouterLink to="/support" target="_blank">支援寶可夢</RouterLink>
     </div>
     <div>
       <v-icon name="pi-venusaur" scale="2" />
@@ -90,7 +90,7 @@ const selectedPart = ref('');
   height: 100dvh;
 
   .links {
-    margin-block: 1rem 0.5rem;
+    margin-bottom: 1rem;
 
     a {
       background-color: #eaf1fb;
