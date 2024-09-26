@@ -97,7 +97,7 @@ const submit = () => {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  height: 100dvh;
 
   .links {
     margin-bottom: 1rem;
