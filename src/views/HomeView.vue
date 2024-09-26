@@ -12,6 +12,11 @@ const genList = computed(() => {
   });
 });
 const selectedPart = ref('');
+
+const submit = () => {
+  if (!selectedPart.value) return;
+  router.push(`/order/${selectedPart.value}`);
+};
 </script>
 
 <template>
@@ -20,15 +25,20 @@ const selectedPart = ref('');
     <p>操作最人性化的Gaole卡序表</p>
     <div class="input__wrap">
       <select v-model="selectedPart">
+        <option value="" disabled>請選擇</option>
         <option v-for="gen in genList" :key="gen" :value="gen">{{ gen }}</option>
       </select>
-      <button @click="router.push(`/order/${selectedPart}`)">
+      <button @click="submit">
         <v-icon name="ri-send-plane-2-line" scale="1" fill="#676767" />
       </button>
     </div>
     <div class="links">
-      <RouterLink to="/manual" target="_blank">操作說明</RouterLink>
-      <RouterLink to="/support" target="_blank">支援寶可夢</RouterLink>
+      <RouterLink to="/manual" target="_blank"
+        >操作說明 <v-icon scale="1.3" name="io-chevron-forward-circle-sharp"
+      /></RouterLink>
+      <RouterLink to="/support" target="_blank"
+        >支援寶可夢券 <v-icon scale="1.3" name="io-chevron-forward-circle-sharp"
+      /></RouterLink>
     </div>
     <div>
       <v-icon name="pi-venusaur" scale="2" />
@@ -84,25 +94,30 @@ const selectedPart = ref('');
 <style lang="scss" scoped>
 .container {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
-  height: 100dvh;
+  height: 100vh;
 
   .links {
     margin-bottom: 1rem;
+    display: flex;
+    justify-content: center;
+    width: min(95%, 30rem);
+    gap: 0.5rem;
 
     a {
+      flex: 1 1;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       background-color: #eaf1fb;
-      background-color: #d2e3fc;
-
       font-size: 1.25rem;
       text-decoration: none;
-      margin-inline: 0.5rem;
       color: #000;
-      padding: 0.5rem 1rem;
-      border-radius: 2rem;
-      color: #0b57d0;
+      padding: 1rem 1rem 1rem 1.5rem;
+      border-radius: 5rem;
+      color: #555;
 
       &:hover {
         background-color: #d2e3fc;
