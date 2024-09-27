@@ -34,11 +34,13 @@ const submit = () => {
     </div>
     <div class="links">
       <RouterLink to="/manual" target="_blank"
-        >操作說明 <v-icon scale="1.3" name="io-chevron-forward-circle-sharp"
-      /></RouterLink>
+        ><p class="link__title">操作說明</p>
+        <p class="link__icon"><v-icon scale="1" name="md-arrowforwardios-round" /></p>
+      </RouterLink>
       <RouterLink to="/support" target="_blank"
-        >支援寶可夢券 <v-icon scale="1.3" name="io-chevron-forward-circle-sharp"
-      /></RouterLink>
+        ><p class="link__title">支援寶可夢券</p>
+        <p class="link__icon"><v-icon scale="1" name="md-arrowforwardios-round" /></p>
+      </RouterLink>
     </div>
     <div>
       <v-icon name="pi-venusaur" scale="2" />
@@ -118,6 +120,19 @@ const submit = () => {
       padding: 1rem 1rem 1rem 1.5rem;
       border-radius: 5rem;
       color: #555;
+      overflow: hidden;
+
+      .link__title {
+        flex: 1 1;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+
+      .link__icon {
+        display: grid;
+        place-items: center;
+      }
 
       &:hover {
         background-color: #d2e3fc;
