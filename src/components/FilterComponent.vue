@@ -1,6 +1,7 @@
 <script setup>
 import { onMounted, ref, watchEffect } from 'vue';
 import MultiSelect from '../components/form/MultiSelect.vue';
+import TheSupport from '@/views/TheSupport.vue';
 
 const hasSelected = defineModel('data', {
   type: Array
@@ -20,18 +21,35 @@ watchEffect(() => {
   star12.value = props.allPokemon[0].star12;
 });
 
-const filterBtn = ref(null);
+const btnWrap = ref(null);
 const filter = ref(null);
 
 const filterShow = ref(false);
+const supportShow = ref(false);
 const filterBtnLeft = ref('');
 const filterBtnTop = ref('5rem');
 const filterBtnTransition = ref('0s');
 const accordion = ref(null);
 
+watchEffect(() => {
+  if (!filterShow.value) supportShow.value = false;
+});
+
+watchEffect(() => {
+  if (!filterShow.value) {
+    accordion.value = null;
+  }
+});
+
+const handler = (e) => {
+  if (e.target.id === accordion.value) {
+    accordion.value = null;
+  }
+};
+
 onMounted(() => {
-  const btnW = filterBtn.value.clientWidth;
-  const btnH = filterBtn.value.clientHeight;
+  const btnW = btnWrap.value.clientWidth;
+  const btnH = btnWrap.value.clientHeight;
   filterBtnLeft.value = window.innerWidth - btnW - 5 + 'px';
 
   //outside click to close filter
@@ -40,7 +58,7 @@ onMounted(() => {
       filterShow.value = false;
     }
   });
-  filterBtn.value.addEventListener('touchmove', (e) => {
+  btnWrap.value.addEventListener('touchmove', (e) => {
     const newX = e.touches[0].clientX - btnW / 2;
     const newY = e.touches[0].clientY - btnH / 2;
 
@@ -49,7 +67,7 @@ onMounted(() => {
     filterBtnTop.value = newY + 'px';
     e.preventDefault();
   });
-  filterBtn.value.addEventListener('touchend', (e) => {
+  btnWrap.value.addEventListener('touchend', (e) => {
     const touch = e.changedTouches[0];
     const halfWindowWidth = window.innerWidth / 2;
     const maxTop = window.innerHeight - btnH - 5;
@@ -66,7 +84,7 @@ onMounted(() => {
       filterBtnTop.value = `5px`;
     }
   });
-  filterBtn.value.addEventListener('mousedown', (mousedownEvent) => {
+  btnWrap.value.addEventListener('mousedown', (mousedownEvent) => {
     const offsetX = mousedownEvent.offsetX;
     const offsetY = mousedownEvent.offsetY;
 
@@ -101,27 +119,30 @@ onMounted(() => {
     document.addEventListener('mouseup', mouseupHandler);
   });
 });
-
-watchEffect(() => {
-  if (!filterShow.value) {
-    accordion.value = null;
-  }
-});
-
-const handler = (e) => {
-  if (e.target.id === accordion.value) {
-    accordion.value = null;
-  }
-};
 </script>
 
 <template>
   <div class="filter" ref="filter">
     <input type="checkbox" name="showFilterHandler" id="showFilterHandler" v-model="filterShow" />
-    <label class="filterBtn" ref="filterBtn" for="showFilterHandler">
-      <v-icon v-show="!filterShow" name="md-filterlist-round" scale="2.2" fill="#0b57d0" />
-      <v-icon v-show="filterShow" name="pr-times" scale="2.2" fill="#0b57d0" />
-    </label>
+    <input
+      type="checkbox"
+      name="showSupportHandler"
+      id="showSupportHandler"
+      v-model="supportShow"
+    />
+    <div class="btnWrap" ref="btnWrap">
+      <label for="showFilterHandler">
+        <v-icon v-show="!filterShow" name="md-settings-round" scale="2.2" fill="#0b57d0" />
+        <v-icon v-show="filterShow" name="pr-times" scale="2.2" fill="#0b57d0" />
+      </label>
+      <label class="supportBtn" for="showSupportHandler">
+        <v-icon v-show="!supportShow" name="md-qrcode2-round" scale="2.2" fill="#0b57d0" />
+        <v-icon v-show="supportShow" name="pr-times" scale="2.2" fill="#0b57d0" />
+      </label>
+    </div>
+    <div class="supportOpts" v-if="supportShow">
+      <TheSupport bgColor="#fff" />
+    </div>
     <div class="filterOpts">
       <div class="filter__accordion">
         <input
@@ -238,30 +259,69 @@ const handler = (e) => {
     height: 100dvh;
   }
 
-  .filterBtn {
+  .btnWrap {
     width: 4rem;
     height: 4rem;
-    background-color: #d2e3fc;
     position: fixed;
     top: v-bind(filterBtnTop);
     left: v-bind(filterBtnLeft);
-    border-radius: 50%;
-    cursor: pointer;
-    display: grid;
-    place-items: center;
     z-index: 999;
     transition: v-bind(filterBtnTransition);
-    box-shadow:
-      0 4px 8px 3px rgba(0, 0, 0, 0.15),
-      0 1px 3px rgba(0, 0, 0, 0.3);
+
+    label {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-color: #d2e3fc;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      box-shadow:
+        0 4px 8px 3px rgba(0, 0, 0, 0.15),
+        0 1px 3px rgba(0, 0, 0, 0.3);
+      top: 0;
+
+      &.supportBtn {
+        z-index: -1;
+        box-shadow: none;
+        transition: top 0.3s ease-in-out;
+      }
+    }
   }
   #showFilterHandler {
     display: none;
 
-    &:checked ~ .filterOpts {
-      top: 0;
+    &:checked {
+      & ~ .filterOpts {
+        top: 0;
+      }
+      & ~ .btnWrap {
+        .supportBtn {
+          top: 4rem;
+          box-shadow:
+            0 4px 8px 3px rgba(0, 0, 0, 0.15),
+            0 1px 3px rgba(0, 0, 0, 0.3);
+        }
+      }
     }
   }
+
+  #showSupportHandler {
+    display: none;
+
+    &:checked {
+      & ~ .supportOpts {
+        /* display: block; */
+      }
+      & ~ .btnWrap {
+        .supportBtn {
+          border: 2px solid #0b57d0;
+        }
+      }
+    }
+  }
+
   .filterOpts {
     position: fixed;
     top: -23.875rem;
@@ -277,7 +337,7 @@ const handler = (e) => {
     max-height: 95dvh;
     overflow: auto;
     transition: 0.3s ease-in-out;
-    z-index: 998;
+    z-index: 997;
 
     &::-webkit-scrollbar {
       display: none;
@@ -364,15 +424,43 @@ const handler = (e) => {
       }
     }
   }
+
+  .supportOpts {
+    /* display: none; */
+    position: fixed;
+    top: 0;
+    width: 95%;
+    padding: 0.625rem;
+    border-radius: 1.5rem;
+    margin-top: 1rem;
+    background-color: #f6f8fc;
+    box-shadow:
+      0 4px 8px 3px rgba(0, 0, 0, 0.15),
+      0 1px 3px rgba(0, 0, 0, 0.3);
+    height: fit-content;
+    max-height: 95dvh;
+    overflow: auto;
+    transition: 0.3s ease-in-out;
+    z-index: 998;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
 }
 @media (max-width: 768px) {
   .filter {
-    .filterBtn {
+    .btnWrap {
       width: 3.5rem;
       height: 3.5rem;
 
-      svg {
-        width: 2rem;
+      label {
+        width: 100%;
+        height: 100%;
+
+        svg {
+          width: 2rem;
+        }
       }
     }
   }
