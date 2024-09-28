@@ -140,8 +140,8 @@ onMounted(() => {
         <v-icon v-show="supportShow" name="pr-times" scale="2.2" fill="#0b57d0" />
       </label>
     </div>
-    <div class="supportOpts" v-if="supportShow">
-      <TheSupport bgColor="#fff" />
+    <div class="supportOpts">
+      <TheSupport bgColor="#fff" v-if="supportShow" />
     </div>
     <div class="filterOpts">
       <div class="filter__accordion">
@@ -298,7 +298,7 @@ onMounted(() => {
       }
       & ~ .btnWrap {
         .supportBtn {
-          top: 4rem;
+          top: 4.5rem;
           box-shadow:
             0 4px 8px 3px rgba(0, 0, 0, 0.15),
             0 1px 3px rgba(0, 0, 0, 0.3);
@@ -312,7 +312,7 @@ onMounted(() => {
 
     &:checked {
       & ~ .supportOpts {
-        /* display: block; */
+        top: 0;
       }
       & ~ .btnWrap {
         .supportBtn {
@@ -426,9 +426,8 @@ onMounted(() => {
   }
 
   .supportOpts {
-    /* display: none; */
     position: fixed;
-    top: 0;
+    top: -100dvh;
     width: 95%;
     padding: 0.625rem;
     border-radius: 1.5rem;
@@ -450,6 +449,15 @@ onMounted(() => {
 }
 @media (max-width: 768px) {
   .filter {
+    #showFilterHandler {
+      &:checked {
+        & ~ .btnWrap {
+          .supportBtn {
+            top: 4rem;
+          }
+        }
+      }
+    }
     .btnWrap {
       width: 3.5rem;
       height: 3.5rem;
