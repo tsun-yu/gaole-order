@@ -1,5 +1,6 @@
 <script setup>
 import { onMounted, ref } from 'vue';
+import { usePokemonStore } from '@/stores/pokemon';
 
 defineProps({
   bgColor: {
@@ -8,30 +9,20 @@ defineProps({
   }
 });
 
+const store = usePokemonStore();
+
 const supportPokemon = ref([]);
 const showQrCode = ref(false);
 const showImgUrl = ref('');
 const qrcodeOutside = ref(null);
 
-const getSupportGaole = async () => {
-  try {
-    const response = await fetch(
-      'https://api.github.com/repos/tsun-yu/gaole-order/contents/src/assets/images/support?ref=develop'
-    );
-    const data = await response.json();
-    supportPokemon.value = data.map(({ name, download_url: url, sha }) => {
-      return { name: name.split('.')[0], url, sha };
-    });
-  } catch (error) {
-    console.error(error);
-  }
-};
 const qrcodeToggle = (e) => {
   if (e.target === qrcodeOutside.value) showQrCode.value = false;
 };
 
-onMounted(() => {
-  getSupportGaole();
+onMounted(async () => {
+  if (!store.supportPokemon.length) await store.fetchSupportPokemon();
+  supportPokemon.value = store.supportPokemon;
 });
 </script>
 

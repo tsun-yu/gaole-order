@@ -3,16 +3,11 @@ import { usePokemonStore } from '@/stores/pokemon';
 import { onMounted } from 'vue';
 
 const store = usePokemonStore();
-const getAllPokemon = async () => {
-  await store.fetchAllPokemon();
-};
-const getOrder = async () => {
-  await store.fetchOrderList();
-};
 
 onMounted(async () => {
-  await getAllPokemon();
-  await getOrder();
+  await store.fetchAllPokemon();
+  await store.fetchOrderList();
+  await store.fetchSupportPokemon();
 });
 </script>
 
