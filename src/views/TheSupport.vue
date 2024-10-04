@@ -1,38 +1,35 @@
 <script setup>
 import { onMounted, ref } from 'vue';
+import { usePokemonStore } from '@/stores/pokemon';
+
+defineProps({
+  bgColor: {
+    type: String,
+    default: '#f6f8fc;'
+  }
+});
+
+const store = usePokemonStore();
 
 const supportPokemon = ref([]);
 const showQrCode = ref(false);
 const showImgUrl = ref('');
-const qrcodeModal = ref(null);
+const qrcodeOutside = ref(null);
 
-const getSupportGaole = async () => {
-  try {
-    const response = await fetch(
-      'https://api.github.com/repos/tsun-yu/gaole-order/contents/src/assets/images/support?ref=develop'
-    );
-    const data = await response.json();
-    supportPokemon.value = data.map(({ name, download_url: url, sha }) => {
-      return { name: name.split('.')[0], url, sha };
-    });
-  } catch (error) {
-    console.error(error);
-  }
-};
 const qrcodeToggle = (e) => {
-  if (e.target === qrcodeModal.value) showQrCode.value = false;
+  if (e.target === qrcodeOutside.value) showQrCode.value = false;
 };
 
-onMounted(() => {
-  getSupportGaole();
+onMounted(async () => {
+  if (!store.supportPokemon.length) await store.fetchSupportPokemon();
+  supportPokemon.value = store.supportPokemon;
 });
 </script>
 
 <template>
-  <input type="radio" name="qrcodeToggle" id="qrcodeToggle" v-model="showQrCode" />
-  <div class="qrcodeModal" v-show="showQrCode" @click="qrcodeToggle" ref="qrcodeModal">
-    <div class="qrcode"><img :src="showImgUrl" alt="" /></div>
-  </div>
+  <input type="checkbox" name="qrcodeToggle" id="qrcodeToggle" v-model="showQrCode" />
+  <div class="qrcode"><img :src="showImgUrl" alt="" /></div>
+  <div class="qrcodeOutside" @click="qrcodeToggle" ref="qrcodeOutside"></div>
   <div class="container">
     <label
       class="support"
@@ -47,10 +44,20 @@ onMounted(() => {
 </template>
 
 <style lang="scss" scoped>
-input[type='radio'] {
+input[type='checkbox'] {
   display: none;
+
+  &:checked {
+    & ~ .qrcodeOutside {
+      display: block;
+    }
+    & ~ .qrcode {
+      top: 1rem;
+    }
+  }
 }
-.qrcodeModal {
+.qrcodeOutside {
+  display: none;
   position: fixed;
   top: 0;
   left: 0;
@@ -59,25 +66,39 @@ input[type='radio'] {
   backdrop-filter: blur(2px);
   background-color: rgba(0, 0, 0, 0.5);
   padding-top: 1rem;
+  z-index: 11;
+}
+.qrcode {
+  background-color: #fff;
+  border-radius: 1.5rem;
+  margin: auto;
+  width: min(80%, 30rem);
+  aspect-ratio: 9/10;
+  overflow: hidden;
+  padding: 1rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+  position: fixed;
+  top: max(-90vh, -34rem);
+  transition: top 0.3s ease-in-out;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 12;
 
-  .qrcode {
-    background-color: #fff;
-    border-radius: 1.5rem;
-    margin: auto;
-    width: min(80%, 30rem);
-    padding: 1rem;
-
-    img {
-      width: 100%;
-      border-radius: 0.75rem;
-    }
+  img {
+    width: 100%;
+    height: 100%;
+    border-radius: 0.75rem;
+    object-fit: cover;
   }
 }
+
 .container {
   padding: 1rem;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
-  gap: 1rem;
+  gap: 0.5rem;
+  background-color: v-bind(bgColor);
+  border-radius: 1rem;
 
   .support {
     font-size: 1.5rem;
